@@ -85,8 +85,7 @@ export function getJsonParserWebviewContent(): string {
 
   textarea {
     width: 100%;
-    height: auto;
-    min-height: 80px;
+    height: 100%;
     background: var(--vscode-editor-background);
     color: var(--vscode-editor-foreground);
     border: 1px solid var(--vscode-input-border);
@@ -98,7 +97,6 @@ export function getJsonParserWebviewContent(): string {
     line-height: 1.6;
     white-space: pre;
     overflow-x: auto;
-    overflow-y: hidden;
   }
 
   textarea.wrap-enabled {
@@ -152,9 +150,11 @@ export function getJsonParserWebviewContent(): string {
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.6;
+    height: 100%;
+  }
+
+  .tree-container:not(.wrap-enabled) {
     overflow-x: auto;
-    overflow-y: auto;
-    height: auto;
   }
 
   .tree-node { margin-left: 0; }
@@ -349,7 +349,7 @@ export function getJsonParserWebviewContent(): string {
       </div>
     </div>
     <div class="panel-content">
-      <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled" wrap="off"></textarea>
+      <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
     </div>
   </div>
 
@@ -380,22 +380,6 @@ export function getJsonParserWebviewContent(): string {
   let expandedNodes = new Set();
   let isUpdatingFromTree = false;
   let parseTimer = null;
-
-  function autoResizeTextarea() {
-    const panelContent = input.parentElement;
-    const maxHeight = panelContent.clientHeight - 24;
-    input.style.height = 'auto';
-    const contentHeight = input.scrollHeight;
-    input.style.height = Math.max(Math.min(contentHeight, maxHeight), 80) + 'px';
-  }
-
-  function autoResizeTreeContainer() {
-    const panelContent = resultContainer.parentElement;
-    const maxHeight = panelContent.clientHeight - 24;
-    const contentHeight = resultContainer.scrollHeight;
-    resultContainer.style.height = Math.max(Math.min(contentHeight, maxHeight), 60) + 'px';
-    resultContainer.style.overflowY = 'auto';
-  }
 
   // 初始化自动换行状态
   const savedWrap = localStorage.getItem('jsonParser.wrapEnabled');
@@ -432,22 +416,14 @@ export function getJsonParserWebviewContent(): string {
       });
     }
     localStorage.setItem('jsonParser.wrapEnabled', String(enabled));
-    autoResizeTextarea();
-    autoResizeTreeContainer();
   });
 
   input.addEventListener('input', () => {
-    autoResizeTextarea();
     clearTimeout(parseTimer);
     parseTimer = setTimeout(() => {
       isUpdatingFromTree = false;
       parseJSON();
     }, 300);
-  });
-
-  window.addEventListener('resize', () => {
-    autoResizeTextarea();
-    autoResizeTreeContainer();
   });
 
   document.getElementById('expandBtn').addEventListener('click', () => {
@@ -459,7 +435,6 @@ export function getJsonParserWebviewContent(): string {
         input.value = JSON.stringify(parsed, null, 2);
       } catch (e) { return; }
     }
-    autoResizeTextarea();
     isUpdatingFromTree = false;
     parseJSON();
   });
@@ -473,7 +448,6 @@ export function getJsonParserWebviewContent(): string {
         input.value = JSON.stringify(parsed);
       } catch (e) { return; }
     }
-    autoResizeTextarea();
     isUpdatingFromTree = false;
     parseJSON();
   });
@@ -504,14 +478,12 @@ export function getJsonParserWebviewContent(): string {
       }
     };
     input.value = JSON.stringify(example, null, 2);
-    autoResizeTextarea();
     isUpdatingFromTree = false;
     parseJSON();
   });
 
   document.getElementById('clearBtn').addEventListener('click', () => {
     input.value = '';
-    autoResizeTextarea();
     currentData = null;
     expandedNodes.clear();
     resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
@@ -562,7 +534,6 @@ export function getJsonParserWebviewContent(): string {
   function renderTree() {
     if (currentData === null) {
       resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
-      resultContainer.style.height = 'auto';
       return;
     }
     resultContainer.innerHTML = '';
@@ -575,7 +546,6 @@ export function getJsonParserWebviewContent(): string {
         el.style.whiteSpace = 'nowrap';
       });
     }
-    autoResizeTreeContainer();
   }
 
   function renderValue(value, path, key, depth) {
@@ -871,7 +841,6 @@ export function getJsonParserWebviewContent(): string {
       const text = JSON.stringify(currentData, null, 2);
       if (input.value !== text) {
         input.value = text;
-        autoResizeTextarea();
         showSyncIndicator('已同步');
       }
       setTimeout(() => { isUpdatingFromTree = false; }, 500);
