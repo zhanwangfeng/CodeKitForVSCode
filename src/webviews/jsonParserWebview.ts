@@ -95,6 +95,42 @@ export function getJsonParserWebviewContent(): string {
     resize: none;
     outline: none;
     line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  textarea.wrap-enabled {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: hidden;
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-wrapper input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--vscode-checkbox-background, var(--vscode-button-background));
+  }
+
+  .checkbox-label {
+    font-size: 12px;
+    font-weight: normal;
+    color: var(--vscode-foreground);
+  }
+
+  .tree-container.wrap-enabled .tree-key,
+  .tree-container.wrap-enabled .tree-value {
+    word-break: break-all;
+    overflow-wrap: break-word;
   }
 
   textarea:focus {
@@ -284,7 +320,13 @@ export function getJsonParserWebviewContent(): string {
 <div class="container">
   <div class="left-panel">
     <div class="panel-header">
-      JSON 输入
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span>JSON 输入</span>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="wrapCheckbox" checked>
+          <span class="checkbox-label">自动换行</span>
+        </label>
+      </div>
       <div class="panel-header-actions">
         <button class="btn btn-ghost" id="expandBtn">展开</button>
         <button class="btn btn-ghost" id="minifyBtn">单行</button>
@@ -293,7 +335,7 @@ export function getJsonParserWebviewContent(): string {
       </div>
     </div>
     <div class="panel-content">
-      <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..."></textarea>
+      <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
     </div>
   </div>
 
@@ -305,7 +347,7 @@ export function getJsonParserWebviewContent(): string {
       </div>
     </div>
     <div class="panel-content">
-      <div id="resultContainer" class="tree-container">
+      <div id="resultContainer" class="tree-container wrap-enabled">
         <div class="placeholder">等待输入 JSON...</div>
       </div>
     </div>
@@ -318,11 +360,26 @@ export function getJsonParserWebviewContent(): string {
   const input = document.getElementById('jsonInput');
   const resultContainer = document.getElementById('resultContainer');
   const syncIndicator = document.getElementById('syncIndicator');
+  const wrapCheckbox = document.getElementById('wrapCheckbox');
 
   let currentData = null;
   let expandedNodes = new Set();
   let isUpdatingFromTree = false;
   let parseTimer = null;
+
+  // 初始化自动换行状态
+  const savedWrap = localStorage.getItem('jsonParser.wrapEnabled');
+  const wrapEnabled = savedWrap === null ? true : savedWrap === 'true';
+  wrapCheckbox.checked = wrapEnabled;
+  input.classList.toggle('wrap-enabled', wrapEnabled);
+  resultContainer.classList.toggle('wrap-enabled', wrapEnabled);
+
+  wrapCheckbox.addEventListener('change', () => {
+    const enabled = wrapCheckbox.checked;
+    input.classList.toggle('wrap-enabled', enabled);
+    resultContainer.classList.toggle('wrap-enabled', enabled);
+    localStorage.setItem('jsonParser.wrapEnabled', String(enabled));
+  });
 
   input.addEventListener('input', () => {
     clearTimeout(parseTimer);
