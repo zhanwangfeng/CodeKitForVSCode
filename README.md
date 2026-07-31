@@ -1,8 +1,8 @@
-# CodeKit For VSCode
+# CodeKit
 
 > 一个 VSCode 扩展工具箱：把常用的开发小工具收进侧边栏，随时取用。
 
-CodeKit For VSCode 是一款基于 VSCode Extension API 打造的工具集扩展。它通过 **Activity Bar（活动栏）的自定义图标入口** 进入主侧边栏的 **Tree View 树形列表**，将各种开发场景中反复出现的小需求沉淀为一个个可即点即用的工具。
+CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通过 **Activity Bar（活动栏）的自定义图标入口** 进入主侧边栏的 **Tree View 树形列表**，将各种开发场景中反复出现的小需求沉淀为一个个可即点即用的工具。
 
 ## 特性
 
@@ -17,7 +17,7 @@ CodeKit For VSCode 是一款基于 VSCode Extension API 打造的工具集扩展
 | 工具 | 说明 |
 | --- | --- |
 | Hello World | 打开一个带动画效果的 WebView 标签页，作为首个示例工具 |
-| JSON Parser | 实时解析 JSON 字符串，左右分栏展示可编辑的树状结构 |
+| JSON Parser | 实时解析 JSON 字符串，双窗口切换展示可编辑的树状结构，支持行号显示 |
 
 ## 项目结构
 
@@ -90,6 +90,7 @@ npm run package
 
 - **0.0.1**：活动栏图标入口 + Tree View 工具列表 + Hello World 动画工具
 - **0.0.2**：JSON Parser 工具（实时解析、可编辑树状图、展开/单行/示例按钮、自动换行）
+- **0.0.3**：JSON 编辑器优化（重叠双窗口切换、共用工具栏、行号显示、错误指示灯泡、展开/收起双模式）
 
 ## License
 
