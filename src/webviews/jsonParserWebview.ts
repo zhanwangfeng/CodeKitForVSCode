@@ -699,6 +699,19 @@ export function getJsonParserWebviewContent(): string {
     setTimeout(() => syncIndicator.classList.remove('show'), 1200);
   }
 
+  let activeEditor = null;
+
+  window.addEventListener('keyup', (e) => {
+    if (!activeEditor) return;
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      activeEditor.commit();
+    } else if (e.keyCode === 27) {
+      e.preventDefault();
+      activeEditor.cancel();
+    }
+  });
+
   function editPrimitive(valueSpan, path, type) {
     if (valueSpan.querySelector('input')) return;
 
@@ -723,6 +736,9 @@ export function getJsonParserWebviewContent(): string {
     const commit = () => {
       if (handled) return;
       handled = true;
+      if (activeEditor && activeEditor.input === input) {
+        activeEditor = null;
+      }
       let newVal;
       if (type === 'number') {
         newVal = parseFloat(input.value);
@@ -740,22 +756,16 @@ export function getJsonParserWebviewContent(): string {
     const cancel = () => {
       if (handled) return;
       handled = true;
+      if (activeEditor && activeEditor.input === input) {
+        activeEditor = null;
+      }
       renderTree();
     };
 
+    activeEditor = { input, commit, cancel };
+
     input.addEventListener('blur', () => {
-      setTimeout(() => { if (!handled) commit(); }, 0);
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        e.stopPropagation();
-        commit();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        e.stopPropagation();
-        cancel();
-      }
+      setTimeout(() => { if (!handled) commit(); }, 100);
     });
   }
 
@@ -805,6 +815,9 @@ export function getJsonParserWebviewContent(): string {
     const commit = () => {
       if (handled) return;
       handled = true;
+      if (activeEditor && activeEditor.input === input) {
+        activeEditor = null;
+      }
       const newKey = input.value.trim();
       if (!newKey || newKey === oldKey) {
         renderTree();
@@ -831,22 +844,16 @@ export function getJsonParserWebviewContent(): string {
     const cancel = () => {
       if (handled) return;
       handled = true;
+      if (activeEditor && activeEditor.input === input) {
+        activeEditor = null;
+      }
       renderTree();
     };
 
+    activeEditor = { input, commit, cancel };
+
     input.addEventListener('blur', () => {
-      setTimeout(() => { if (!handled) commit(); }, 0);
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        e.stopPropagation();
-        commit();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        e.stopPropagation();
-        cancel();
-      }
+      setTimeout(() => { if (!handled) commit(); }, 100);
     });
   }
 
