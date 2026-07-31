@@ -133,6 +133,15 @@ export function getJsonParserWebviewContent(): string {
     overflow-wrap: break-word;
   }
 
+  .tree-container:not(.wrap-enabled) .tree-item {
+    flex-wrap: nowrap;
+  }
+
+  .tree-container:not(.wrap-enabled) .tree-key,
+  .tree-container:not(.wrap-enabled) .tree-value {
+    white-space: nowrap;
+  }
+
   textarea:focus {
     border-color: var(--vscode-focusBorder);
   }
@@ -141,6 +150,7 @@ export function getJsonParserWebviewContent(): string {
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.6;
+    overflow-x: auto;
   }
 
   .tree-node { margin-left: 0; }
@@ -151,7 +161,7 @@ export function getJsonParserWebviewContent(): string {
     display: flex;
     align-items: flex-start;
     gap: 6px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .tree-key {
@@ -373,11 +383,34 @@ export function getJsonParserWebviewContent(): string {
   wrapCheckbox.checked = wrapEnabled;
   input.classList.toggle('wrap-enabled', wrapEnabled);
   resultContainer.classList.toggle('wrap-enabled', wrapEnabled);
+  if (!wrapEnabled) {
+    resultContainer.querySelectorAll('.tree-item').forEach(item => {
+      item.style.flexWrap = 'nowrap';
+    });
+    resultContainer.querySelectorAll('.tree-key, .tree-value').forEach(el => {
+      el.style.whiteSpace = 'nowrap';
+    });
+  }
 
   wrapCheckbox.addEventListener('change', () => {
     const enabled = wrapCheckbox.checked;
     input.classList.toggle('wrap-enabled', enabled);
     resultContainer.classList.toggle('wrap-enabled', enabled);
+    if (enabled) {
+      resultContainer.querySelectorAll('.tree-item').forEach(item => {
+        item.style.flexWrap = 'wrap';
+      });
+      resultContainer.querySelectorAll('.tree-key, .tree-value').forEach(el => {
+        el.style.whiteSpace = '';
+      });
+    } else {
+      resultContainer.querySelectorAll('.tree-item').forEach(item => {
+        item.style.flexWrap = 'nowrap';
+      });
+      resultContainer.querySelectorAll('.tree-key, .tree-value').forEach(el => {
+        el.style.whiteSpace = 'nowrap';
+      });
+    }
     localStorage.setItem('jsonParser.wrapEnabled', String(enabled));
   });
 
@@ -501,6 +534,14 @@ export function getJsonParserWebviewContent(): string {
     }
     resultContainer.innerHTML = '';
     resultContainer.appendChild(renderValue(currentData, '', null, 0));
+    if (!wrapCheckbox.checked) {
+      resultContainer.querySelectorAll('.tree-item').forEach(item => {
+        item.style.flexWrap = 'nowrap';
+      });
+      resultContainer.querySelectorAll('.tree-key, .tree-value').forEach(el => {
+        el.style.whiteSpace = 'nowrap';
+      });
+    }
   }
 
   function renderValue(value, path, key, depth) {
