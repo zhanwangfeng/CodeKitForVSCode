@@ -45,7 +45,37 @@ export function getJsonParserWebviewContent(): string {
     font-weight: 600;
     font-size: 13px;
     letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+
+  .panel-header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none;
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+
+  .btn:hover { background: var(--vscode-button-hoverBackground); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--vscode-editor-foreground);
+    border: 1px solid var(--vscode-panel-border);
+  }
+
+  .btn-ghost:hover { background: var(--vscode-input-background); }
 
   .panel-content {
     flex: 1;
@@ -77,24 +107,29 @@ export function getJsonParserWebviewContent(): string {
     line-height: 1.6;
   }
 
-  .tree-node {
-    margin-left: 0;
-  }
-
-  .tree-children {
-    margin-left: 20px;
-  }
+  .tree-node { margin-left: 0; }
+  .tree-children { margin-left: 20px; }
 
   .tree-item {
     margin: 4px 0;
     display: flex;
     align-items: flex-start;
     gap: 6px;
+    flex-wrap: wrap;
   }
 
   .tree-key {
     color: var(--vscode-json-property-syntax);
     font-weight: 500;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 1px 4px;
+    transition: background 0.15s;
+  }
+
+  .tree-key:hover {
+    background: var(--vscode-input-background);
+    outline: 1px dashed var(--vscode-panel-border);
   }
 
   .tree-colon {
@@ -105,7 +140,13 @@ export function getJsonParserWebviewContent(): string {
   .tree-value {
     border-radius: 3px;
     padding: 1px 4px;
-    cursor: default;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .tree-value:hover {
+    background: var(--vscode-input-background);
+    outline: 1px dashed var(--vscode-panel-border);
   }
 
   .tree-value.string { color: var(--vscode-json-string-syntax); }
@@ -113,7 +154,9 @@ export function getJsonParserWebviewContent(): string {
   .tree-value.boolean { color: var(--vscode-json-boolean-syntax); }
   .tree-value.null { color: var(--vscode-json-null-foreground); font-style: italic; }
   .tree-value.empty-object,
-  .tree-value.empty-array { color: var(--vscode-editor-foreground); opacity: 0.5; }
+  .tree-value.empty-array { color: var(--vscode-editor-foreground); opacity: 0.5; cursor: default; }
+  .tree-value.empty-object:hover,
+  .tree-value.empty-array:hover { background: transparent; outline: none; }
 
   .tree-toggle {
     cursor: pointer;
@@ -142,6 +185,52 @@ export function getJsonParserWebviewContent(): string {
     font-weight: 500;
     cursor: default;
   }
+
+  .tree-actions {
+    display: inline-flex;
+    gap: 2px;
+    margin-left: 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .tree-item:hover .tree-actions { opacity: 1; }
+
+  .action-btn {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--vscode-editor-foreground);
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .action-btn:hover {
+    background: var(--vscode-input-background);
+  }
+
+  .action-btn.delete:hover { color: var(--vscode-errorForeground, #f48771); }
+
+  .edit-input {
+    background: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: 1px solid var(--vscode-focusBorder);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    min-width: 60px;
+  }
+
+  .edit-input:focus { border-color: var(--vscode-focusBorder); }
 
   .error-container {
     padding: 16px;
@@ -172,19 +261,47 @@ export function getJsonParserWebviewContent(): string {
     opacity: 0.6;
     font-size: 14px;
   }
+
+  .sync-indicator {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    padding: 6px 12px;
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .sync-indicator.show { opacity: 1; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="left-panel">
-    <div class="panel-header">JSON 输入</div>
+    <div class="panel-header">
+      JSON 输入
+      <div class="panel-header-actions">
+        <button class="btn btn-ghost" id="formatBtn">格式化</button>
+        <button class="btn btn-ghost" id="clearBtn">清空</button>
+      </div>
+    </div>
     <div class="panel-content">
       <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..."></textarea>
     </div>
   </div>
 
   <div class="right-panel">
-    <div class="panel-header">解析结果</div>
+    <div class="panel-header">
+      解析结果（可编辑）
+      <div class="panel-header-actions">
+        <button class="btn btn-ghost" id="copyBtn">复制</button>
+      </div>
+    </div>
     <div class="panel-content">
       <div id="resultContainer" class="tree-container">
         <div class="placeholder">等待输入 JSON...</div>
@@ -193,117 +310,141 @@ export function getJsonParserWebviewContent(): string {
   </div>
 </div>
 
+<div class="sync-indicator" id="syncIndicator">已同步</div>
+
 <script>
   const input = document.getElementById('jsonInput');
   const resultContainer = document.getElementById('resultContainer');
+  const syncIndicator = document.getElementById('syncIndicator');
 
+  let currentData = null;
+  let expandedNodes = new Set();
+  let isUpdatingFromTree = false;
   let parseTimer = null;
 
   input.addEventListener('input', () => {
     clearTimeout(parseTimer);
-    parseTimer = setTimeout(parseJSON, 300);
+    parseTimer = setTimeout(() => {
+      isUpdatingFromTree = false;
+      parseJSON();
+    }, 300);
+  });
+
+  document.getElementById('formatBtn').addEventListener('click', () => {
+    if (currentData !== null) {
+      input.value = JSON.stringify(currentData, null, 2);
+    }
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    input.value = '';
+    currentData = null;
+    expandedNodes.clear();
+    resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    if (currentData !== null) {
+      const text = JSON.stringify(currentData, null, 2);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          showSyncIndicator('已复制到剪贴板');
+        });
+      }
+    }
   });
 
   function parseJSON() {
     const text = input.value.trim();
 
     if (!text) {
+      currentData = null;
+      expandedNodes.clear();
       resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
       return;
     }
 
     try {
-      const data = JSON.parse(text);
-      resultContainer.innerHTML = '';
-      resultContainer.appendChild(renderValue(data));
+      currentData = JSON.parse(text);
+      expandedNodes.clear();
+      autoExpand(currentData, '');
+      renderTree();
     } catch (e) {
       showError(e);
     }
   }
 
-  function renderValue(value, key = null, depth = 0) {
-    const container = document.createElement('div');
-    container.className = 'tree-node';
-
-    if (value === null) {
-      container.appendChild(renderPrimitive(key, 'null', 'null'));
-    } else if (Array.isArray(value)) {
-      container.appendChild(renderArray(key, value, depth));
-    } else if (typeof value === 'object') {
-      container.appendChild(renderObject(key, value, depth));
-    } else {
-      const type = typeof value;
-      container.appendChild(renderPrimitive(key, type, value));
+  function autoExpand(value, path) {
+    if (value !== null && typeof value === 'object') {
+      expandedNodes.add(path);
+      if (Array.isArray(value)) {
+        value.forEach((v, i) => autoExpand(v, path ? path + '.' + i : String(i)));
+      } else {
+        Object.entries(value).forEach(([k, v]) => autoExpand(v, path ? path + '.' + k : k));
+      }
     }
-
-    return container;
   }
 
-  function renderPrimitive(key, type, value) {
+  function renderTree() {
+    if (currentData === null) {
+      resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+      return;
+    }
+    resultContainer.innerHTML = '';
+    resultContainer.appendChild(renderValue(currentData, '', null, 0));
+  }
+
+  function renderValue(value, path, key, depth) {
+    if (value === null) {
+      return renderPrimitive(path, key, 'null', null);
+    } else if (Array.isArray(value)) {
+      return renderArray(path, key, value, depth);
+    } else if (typeof value === 'object') {
+      return renderObject(path, key, value, depth);
+    } else {
+      const type = typeof value;
+      return renderPrimitive(path, key, type, value);
+    }
+  }
+
+  function renderPrimitive(path, key, type, value) {
     const item = document.createElement('div');
     item.className = 'tree-item';
 
     if (key !== null) {
-      const keySpan = document.createElement('span');
-      keySpan.className = 'tree-key';
-      keySpan.textContent = key;
-      item.appendChild(keySpan);
-
-      const colon = document.createElement('span');
-      colon.className = 'tree-colon';
-      colon.textContent = ':';
-      item.appendChild(colon);
+      item.appendChild(createKeySpan(key, path));
+      item.appendChild(createColon());
     }
 
-    const valueSpan = document.createElement('span');
-    valueSpan.className = 'tree-value ' + type;
-
-    if (type === 'string') {
-      valueSpan.textContent = '"' + escapeHtml(value) + '"';
-    } else if (type === 'boolean') {
-      valueSpan.textContent = value ? 'true' : 'false';
-    } else if (type === 'null') {
-      valueSpan.textContent = 'null';
-    } else {
-      valueSpan.textContent = value;
-    }
-
-    item.appendChild(valueSpan);
+    item.appendChild(createValueSpan(type, value, path));
 
     const badge = document.createElement('span');
     badge.className = 'tree-type-badge';
     badge.textContent = type;
     item.appendChild(badge);
 
+    if (key !== null) {
+      item.appendChild(createActions(path, key));
+    }
+
     return item;
   }
 
-  function renderArray(key, array, depth) {
+  function renderArray(path, key, array, depth) {
+    const wrapper = document.createElement('div');
     const item = document.createElement('div');
     item.className = 'tree-item';
 
     const toggle = document.createElement('span');
     toggle.className = 'tree-toggle';
-    toggle.textContent = '▼';
-    toggle.addEventListener('click', () => {
-      const children = item.nextElementSibling;
-      if (children) {
-        children.style.display = children.style.display === 'none' ? 'block' : 'none';
-        toggle.textContent = children.style.display === 'none' ? '▶' : '▼';
-      }
-    });
+    const isExpanded = expandedNodes.has(path);
+    toggle.textContent = isExpanded ? '▼' : '▶';
+    toggle.addEventListener('click', () => toggleNode(path));
     item.appendChild(toggle);
 
     if (key !== null) {
-      const keySpan = document.createElement('span');
-      keySpan.className = 'tree-key';
-      keySpan.textContent = key;
-      item.appendChild(keySpan);
-
-      const colon = document.createElement('span');
-      colon.className = 'tree-colon';
-      colon.textContent = ':';
-      item.appendChild(colon);
+      item.appendChild(createKeySpan(key, path));
+      item.appendChild(createColon());
     }
 
     const count = document.createElement('span');
@@ -321,50 +462,37 @@ export function getJsonParserWebviewContent(): string {
       toggle.style.visibility = 'hidden';
     }
 
-    const container = document.createElement('div');
-    container.className = 'tree-children';
-
-    if (array.length > 0) {
-      array.forEach((val, i) => {
-        container.appendChild(renderValue(val, i.toString(), depth + 1));
-      });
-    }
-
-    const wrapper = document.createElement('div');
+    item.appendChild(createActions(path, key));
     wrapper.appendChild(item);
-    if (array.length > 0) {
+
+    if (isExpanded && array.length > 0) {
+      const container = document.createElement('div');
+      container.className = 'tree-children';
+      array.forEach((val, i) => {
+        const childPath = path ? path + '.' + i : String(i);
+        container.appendChild(renderValue(val, childPath, String(i), depth + 1));
+      });
       wrapper.appendChild(container);
     }
 
     return wrapper;
   }
 
-  function renderObject(key, obj, depth) {
+  function renderObject(path, key, obj, depth) {
+    const wrapper = document.createElement('div');
     const item = document.createElement('div');
     item.className = 'tree-item';
 
     const toggle = document.createElement('span');
     toggle.className = 'tree-toggle';
-    toggle.textContent = '▼';
-    toggle.addEventListener('click', () => {
-      const children = item.nextElementSibling;
-      if (children) {
-        children.style.display = children.style.display === 'none' ? 'block' : 'none';
-        toggle.textContent = children.style.display === 'none' ? '▶' : '▼';
-      }
-    });
+    const isExpanded = expandedNodes.has(path);
+    toggle.textContent = isExpanded ? '▼' : '▶';
+    toggle.addEventListener('click', () => toggleNode(path));
     item.appendChild(toggle);
 
     if (key !== null) {
-      const keySpan = document.createElement('span');
-      keySpan.className = 'tree-key';
-      keySpan.textContent = key;
-      item.appendChild(keySpan);
-
-      const colon = document.createElement('span');
-      colon.className = 'tree-colon';
-      colon.textContent = ':';
-      item.appendChild(colon);
+      item.appendChild(createKeySpan(key, path));
+      item.appendChild(createColon());
     }
 
     const keys = Object.keys(obj);
@@ -383,22 +511,370 @@ export function getJsonParserWebviewContent(): string {
       toggle.style.visibility = 'hidden';
     }
 
-    const container = document.createElement('div');
-    container.className = 'tree-children';
-
-    if (keys.length > 0) {
-      Object.entries(obj).forEach(([k, val]) => {
-        container.appendChild(renderValue(val, k, depth + 1));
-      });
-    }
-
-    const wrapper = document.createElement('div');
+    item.appendChild(createActions(path, key));
     wrapper.appendChild(item);
-    if (keys.length > 0) {
+
+    if (isExpanded && keys.length > 0) {
+      const container = document.createElement('div');
+      container.className = 'tree-children';
+      Object.entries(obj).forEach(([k, val]) => {
+        const childPath = path ? path + '.' + k : k;
+        container.appendChild(renderValue(val, childPath, k, depth + 1));
+      });
       wrapper.appendChild(container);
     }
 
     return wrapper;
+  }
+
+  function createKeySpan(key, parentPath) {
+    const keySpan = document.createElement('span');
+    keySpan.className = 'tree-key';
+    keySpan.textContent = key;
+    keySpan.title = '点击编辑键名';
+    keySpan.addEventListener('click', (e) => {
+      e.stopPropagation();
+      editKey(keySpan, parentPath, key);
+    });
+    return keySpan;
+  }
+
+  function createColon() {
+    const colon = document.createElement('span');
+    colon.className = 'tree-colon';
+    colon.textContent = ':';
+    return colon;
+  }
+
+  function createValueSpan(type, value, path) {
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'tree-value ' + type;
+
+    if (type === 'string') {
+      valueSpan.textContent = '"' + escapeHtml(value) + '"';
+      valueSpan.title = '点击编辑字符串';
+      valueSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editPrimitive(valueSpan, path, 'string');
+      });
+    } else if (type === 'number') {
+      valueSpan.textContent = String(value);
+      valueSpan.title = '点击编辑数字';
+      valueSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editPrimitive(valueSpan, path, 'number');
+      });
+    } else if (type === 'boolean') {
+      valueSpan.textContent = value ? 'true' : 'false';
+      valueSpan.title = '点击切换 true/false';
+      valueSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleBoolean(path);
+      });
+    } else if (type === 'null') {
+      valueSpan.textContent = 'null';
+      valueSpan.title = '点击改为其他类型';
+      valueSpan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        changeNullType(path);
+      });
+    }
+
+    return valueSpan;
+  }
+
+  function createActions(path, key) {
+    const actions = document.createElement('span');
+    actions.className = 'tree-actions';
+
+    if (key !== null) {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'action-btn delete';
+      deleteBtn.title = '删除';
+      deleteBtn.textContent = '\u00d7';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteNode(path);
+      });
+      actions.appendChild(deleteBtn);
+    } else {
+      const addBtn = document.createElement('button');
+      addBtn.className = 'action-btn';
+      addBtn.title = path && getValueAtPath(path) !== null && typeof getValueAtPath(path) === 'object' && !Array.isArray(getValueAtPath(path)) ? '添加属性' : '添加元素';
+      addBtn.textContent = '+';
+      addBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const val = getValueAtPath(path);
+        if (Array.isArray(val)) {
+          addArrayItem(path);
+        } else if (val && typeof val === 'object') {
+          addObjectKey(path);
+        }
+      });
+      actions.appendChild(addBtn);
+    }
+
+    return actions;
+  }
+
+  function toggleNode(path) {
+    if (expandedNodes.has(path)) {
+      expandedNodes.delete(path);
+    } else {
+      expandedNodes.add(path);
+    }
+    renderTree();
+  }
+
+  function getValueAtPath(path) {
+    if (!path) return currentData;
+    const keys = path.split('.');
+    return keys.reduce((acc, key) => acc[key], currentData);
+  }
+
+  function setValueAtPath(path, value) {
+    if (!path) {
+      currentData = value;
+      return;
+    }
+    const keys = path.split('.');
+    const lastKey = keys.pop();
+    const target = keys.reduce((acc, key) => acc[key], currentData);
+    target[lastKey] = value;
+  }
+
+  function deleteValueAtPath(path) {
+    const keys = path.split('.');
+    const lastKey = keys.pop();
+    const target = keys.reduce((acc, key) => acc[key], currentData);
+    if (Array.isArray(target)) {
+      const idx = parseInt(lastKey);
+      target.splice(idx, 1);
+      reindexExpandedNodesAfterDelete(path, idx);
+    } else {
+      delete target[lastKey];
+    }
+  }
+
+  function reindexExpandedNodesAfterDelete(deletedPath, deletedIdx) {
+    const parentPath = deletedPath.substring(0, deletedPath.lastIndexOf('.'));
+    expandedNodes.forEach(p => {
+      if (p.startsWith(deletedPath + '.')) {
+        expandedNodes.delete(p);
+      }
+    });
+    if (parentPath) {
+      const prefix = parentPath + '.';
+      expandedNodes.forEach(p => {
+        if (p.startsWith(prefix)) {
+          const rest = p.substring(prefix.length);
+          const dotIdx = rest.indexOf('.');
+          const firstSegment = dotIdx >= 0 ? rest.substring(0, dotIdx) : rest;
+          const idx = parseInt(firstSegment);
+          if (!isNaN(idx) && idx > deletedIdx) {
+            const newPath = prefix + (idx - 1) + (dotIdx >= 0 ? rest.substring(dotIdx) : '');
+            expandedNodes.delete(p);
+            expandedNodes.add(newPath);
+          }
+        }
+      });
+    }
+  }
+
+  function syncLeftPanel() {
+    if (currentData !== null && !isUpdatingFromTree) {
+      isUpdatingFromTree = true;
+      const text = JSON.stringify(currentData, null, 2);
+      if (input.value !== text) {
+        input.value = text;
+        showSyncIndicator('已同步');
+      }
+      setTimeout(() => { isUpdatingFromTree = false; }, 500);
+    }
+  }
+
+  function showSyncIndicator(text) {
+    syncIndicator.textContent = text;
+    syncIndicator.classList.add('show');
+    setTimeout(() => syncIndicator.classList.remove('show'), 1200);
+  }
+
+  function editPrimitive(valueSpan, path, type) {
+    if (valueSpan.querySelector('input')) return;
+
+    const currentValue = getValueAtPath(path);
+    const input = document.createElement('input');
+    input.className = 'edit-input';
+    input.type = type === 'number' ? 'number' : 'text';
+
+    if (type === 'string') {
+      input.value = currentValue;
+    } else if (type === 'number') {
+      input.value = String(currentValue);
+    }
+
+    valueSpan.textContent = '';
+    valueSpan.appendChild(input);
+    input.focus();
+    input.select();
+
+    const commit = () => {
+      let newVal;
+      if (type === 'number') {
+        newVal = parseFloat(input.value);
+        if (isNaN(newVal)) {
+          newVal = 0;
+        }
+      } else {
+        newVal = input.value;
+      }
+      setValueAtPath(path, newVal);
+      renderTree();
+      syncLeftPanel();
+    };
+
+    const cancel = () => {
+      renderTree();
+    };
+
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.removeEventListener('blur', commit);
+        commit();
+      } else if (e.key === 'Escape') {
+        input.removeEventListener('blur', commit);
+        cancel();
+      }
+    });
+  }
+
+  function toggleBoolean(path) {
+    const val = getValueAtPath(path);
+    setValueAtPath(path, !val);
+    renderTree();
+    syncLeftPanel();
+  }
+
+  function changeNullType(path) {
+    const val = prompt('null 改为:', '输入 string / number / boolean / object / array');
+    if (val === null) return;
+
+    const type = val.trim().toLowerCase();
+    let newVal;
+    switch (type) {
+      case 'string': newVal = ''; break;
+      case 'number': newVal = 0; break;
+      case 'boolean': newVal = false; break;
+      case 'object': newVal = {}; break;
+      case 'array': newVal = []; break;
+      default: return;
+    }
+    setValueAtPath(path, newVal);
+    if (newVal !== null && typeof newVal === 'object') {
+      expandedNodes.add(path);
+    }
+    renderTree();
+    syncLeftPanel();
+  }
+
+  function editKey(keySpan, parentPath, oldKey) {
+    if (keySpan.querySelector('input')) return;
+
+    const input = document.createElement('input');
+    input.className = 'edit-input';
+    input.value = oldKey;
+
+    keySpan.textContent = '';
+    keySpan.appendChild(input);
+    input.focus();
+    input.select();
+
+    const commit = () => {
+      const newKey = input.value.trim();
+      if (!newKey || newKey === oldKey) {
+        renderTree();
+        return;
+      }
+      const target = getValueAtPath(parentPath);
+      if (target && typeof target === 'object' && !Array.isArray(target)) {
+        target[newKey] = target[oldKey];
+        delete target[oldKey];
+        expandedNodes.forEach(p => {
+          if (p.startsWith(parentPath + '.' + oldKey)) {
+            const newPath = parentPath + '.' + newKey + p.substring(parentPath.length + 1 + oldKey.length);
+            expandedNodes.delete(p);
+            expandedNodes.add(newPath);
+          }
+        });
+        renderTree();
+        syncLeftPanel();
+      } else {
+        renderTree();
+      }
+    };
+
+    const cancel = () => {
+      renderTree();
+    };
+
+    input.addEventListener('blur', commit);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.removeEventListener('blur', commit);
+        commit();
+      } else if (e.key === 'Escape') {
+        input.removeEventListener('blur', commit);
+        cancel();
+      }
+    });
+  }
+
+  function addArrayItem(path) {
+    const arr = getValueAtPath(path);
+    if (!Array.isArray(arr)) return;
+    arr.push(null);
+    expandedNodes.add(path);
+    renderTree();
+    syncLeftPanel();
+  }
+
+  function addObjectKey(path) {
+    const obj = getValueAtPath(path);
+    if (!obj || typeof obj !== 'object') return;
+    const baseKey = 'key' + (Object.keys(obj).length + 1);
+    let finalKey = baseKey;
+    let counter = 1;
+    while (finalKey in obj) {
+      finalKey = baseKey + '_' + counter++;
+    }
+    obj[finalKey] = null;
+    expandedNodes.add(path);
+    renderTree();
+    syncLeftPanel();
+  }
+
+  function deleteNode(path) {
+    if (!confirm('确认删除该节点?')) return;
+    expandedNodes.forEach(p => {
+      if (p === path || p.startsWith(path + '.')) {
+        expandedNodes.delete(p);
+      }
+    });
+    const parentPath = path.substring(0, path.lastIndexOf('.'));
+    const lastKey = path.substring(path.lastIndexOf('.') + 1);
+    const parent = parentPath ? getValueAtPath(parentPath) : currentData;
+
+    if (Array.isArray(parent)) {
+      const idx = parseInt(lastKey);
+      parent.splice(idx, 1);
+      reindexExpandedNodesAfterDelete(path, idx);
+    } else {
+      delete parent[lastKey];
+    }
+
+    renderTree();
+    syncLeftPanel();
   }
 
   function showError(error) {
@@ -413,8 +889,7 @@ export function getJsonParserWebviewContent(): string {
     const message = document.createElement('div');
     message.className = 'error-message';
 
-    let errorMessage = error.message;
-
+    const errorMessage = error.message;
     const lineMatch = errorMessage.match(/line (\\d+)/);
     const columnMatch = errorMessage.match(/column (\\d+)/);
 
