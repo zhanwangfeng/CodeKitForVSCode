@@ -798,7 +798,7 @@ export function getJsonParserWebviewContent(): string {
     syncLeftPanel();
   }
 
-  function editKey(keySpan, parentPath, oldKey) {
+  function editKey(keySpan, nodePath, oldKey) {
     if (keySpan.querySelector('input')) return;
 
     const input = document.createElement('input');
@@ -809,6 +809,9 @@ export function getJsonParserWebviewContent(): string {
     keySpan.appendChild(input);
     input.focus();
     input.select();
+
+    const lastDot = nodePath.lastIndexOf('.');
+    const parentPath = lastDot >= 0 ? nodePath.substring(0, lastDot) : '';
 
     let handled = false;
 
@@ -827,9 +830,11 @@ export function getJsonParserWebviewContent(): string {
       if (target && typeof target === 'object' && !Array.isArray(target)) {
         target[newKey] = target[oldKey];
         delete target[oldKey];
+        const oldPrefix = parentPath ? parentPath + '.' + oldKey : oldKey;
+        const newPrefix = parentPath ? parentPath + '.' + newKey : newKey;
         expandedNodes.forEach(p => {
-          if (p.startsWith(parentPath + '.' + oldKey)) {
-            const newPath = parentPath + '.' + newKey + p.substring(parentPath.length + 1 + oldKey.length);
+          if (p === oldPrefix || p.startsWith(oldPrefix + '.')) {
+            const newPath = newPrefix + p.substring(oldPrefix.length);
             expandedNodes.delete(p);
             expandedNodes.add(newPath);
           }
