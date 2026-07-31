@@ -1,8 +1,8 @@
-# CodeKit For VSCode
+# CodeKit
 
 > 一个 VSCode 扩展工具箱：把常用的开发小工具收进侧边栏，随时取用。
 
-CodeKit For VSCode 是一款基于 VSCode Extension API 打造的工具集扩展。它通过 **Activity Bar（活动栏）的自定义图标入口** 进入主侧边栏的 **Tree View 树形列表**，将各种开发场景中反复出现的小需求沉淀为一个个可即点即用的工具。
+CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通过 **Activity Bar（活动栏）的自定义图标入口** 进入主侧边栏的 **Tree View 树形列表**，将各种开发场景中反复出现的小需求沉淀为一个个可即点即用的工具。
 
 ## 特性
 

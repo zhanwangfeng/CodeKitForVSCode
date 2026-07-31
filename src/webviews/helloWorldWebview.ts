@@ -98,7 +98,7 @@ export function getHelloWorldWebviewContent(): string {
 <body>
   <div class="hello"></div>
   <div class="card">
-    <h2>CodeKit For VSCode</h2>
+    <h2>CodeKit</h2>
     <p>一个把常用开发小工具收进侧边栏的 VSCode 扩展工具箱，随时取用。</p>
     <ul>
       <li>Activity Bar 自定义图标入口，一键进入工具面板</li>

@@ -11,48 +11,60 @@ export function getJsonParserWebviewContent(): string {
   html, body { height: 100%; font-family: var(--vscode-font-family); }
 
   body {
-    display: flex;
     background: var(--vscode-editor-background);
     color: var(--vscode-editor-foreground);
   }
 
   .container {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
   }
 
-  .left-panel {
-    width: 50%;
-    min-width: 200px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--vscode-panel-border);
-  }
-
-  .right-panel {
-    width: 50%;
-    min-width: 200px;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-  }
-
-  .panel-header {
-    padding: 12px 16px;
-    background: var(--vscode-editorGroupHeader-tabsBackground);
-    border-bottom: 1px solid var(--vscode-panel-border);
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 0.5px;
+  .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 16px;
+    background: var(--vscode-editorGroupHeader-tabsBackground);
+    border-bottom: 1px solid var(--vscode-panel-border);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
-  .panel-header-actions {
+  .window-tabs {
+    display: flex;
+    gap: 4px;
+  }
+
+  .tab {
+    background: transparent;
+    color: var(--vscode-editor-foreground);
+    border: 1px solid var(--vscode-panel-border);
+    padding: 4px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .tab:hover { background: var(--vscode-input-background); }
+
+  .tab.active {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border-color: var(--vscode-button-background);
+  }
+
+  .toolbar-actions {
     display: flex;
     gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .btn {
@@ -77,34 +89,6 @@ export function getJsonParserWebviewContent(): string {
 
   .btn-ghost:hover { background: var(--vscode-input-background); }
 
-  .panel-content {
-    flex: 1;
-    padding: 12px;
-    overflow: auto;
-  }
-
-  textarea {
-    width: 100%;
-    height: 100%;
-    background: var(--vscode-editor-background);
-    color: var(--vscode-editor-foreground);
-    border: 1px solid var(--vscode-input-border);
-    padding: 12px;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    resize: none;
-    outline: none;
-    line-height: 1.6;
-    white-space: pre;
-    overflow-x: auto;
-  }
-
-  textarea.wrap-enabled {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-x: hidden;
-  }
-
   .checkbox-wrapper {
     display: flex;
     align-items: center;
@@ -127,6 +111,83 @@ export function getJsonParserWebviewContent(): string {
     color: var(--vscode-foreground);
   }
 
+  .window-stage {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .window-pane {
+    position: absolute;
+    inset: 0;
+    display: none;
+    overflow: auto;
+    padding: 12px;
+  }
+
+  .window-pane.active { display: block; }
+
+  .text-editor {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .line-numbers {
+    display: none;
+    flex-shrink: 0;
+    padding: 12px 8px 12px 12px;
+    background: var(--vscode-editor-background);
+    color: var(--vscode-descriptionForeground);
+    border: 1px solid var(--vscode-input-border);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: right;
+    white-space: pre;
+    overflow: hidden;
+    user-select: none;
+    min-width: 3ch;
+  }
+
+  .text-editor.show-line-numbers .line-numbers { display: block; }
+
+  .text-editor.show-line-numbers textarea {
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+  }
+
+  textarea {
+    display: block;
+    flex: 1;
+    width: auto;
+    height: 100%;
+    background: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    border: 1px solid var(--vscode-input-border);
+    padding: 12px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  textarea.wrap-enabled {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: hidden;
+  }
+
+  textarea:focus {
+    border-color: var(--vscode-focusBorder);
+  }
+
   .tree-container.wrap-enabled .tree-key,
   .tree-container.wrap-enabled .tree-value {
     word-break: break-all;
@@ -142,8 +203,29 @@ export function getJsonParserWebviewContent(): string {
     white-space: nowrap;
   }
 
-  textarea:focus {
-    border-color: var(--vscode-focusBorder);
+  .tree-container.show-line-numbers {
+    counter-reset: tree-line;
+    position: relative;
+    padding-left: 44px;
+  }
+
+  .tree-container.show-line-numbers .tree-item {
+    counter-increment: tree-line;
+    position: relative;
+  }
+
+  .tree-container.show-line-numbers .tree-item::before {
+    content: counter(tree-line);
+    position: absolute;
+    left: var(--line-offset, 0);
+    top: 4px;
+    display: inline-block;
+    min-width: 3ch;
+    text-align: right;
+    color: var(--vscode-descriptionForeground);
+    font-size: 12px;
+    flex-shrink: 0;
+    user-select: none;
   }
 
   .tree-container {
@@ -277,7 +359,7 @@ export function getJsonParserWebviewContent(): string {
     font-family: inherit;
     font-size: inherit;
     outline: none;
-    min-width: 60px;
+    min-width: 4ch;
   }
 
   .edit-input:focus { border-color: var(--vscode-focusBorder); }
@@ -312,6 +394,57 @@ export function getJsonParserWebviewContent(): string {
     font-size: 14px;
   }
 
+  .error-indicator {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    display: none;
+    z-index: 10;
+  }
+
+  .error-indicator.show { display: block; }
+
+  .error-bulb {
+    color: var(--vscode-errorForeground, #f48771);
+    cursor: pointer;
+    display: block;
+    filter: drop-shadow(0 0 3px rgba(255, 0, 0, 0.25));
+  }
+
+  .error-popup {
+    position: absolute;
+    left: 34px;
+    bottom: 0;
+    min-width: 260px;
+    max-width: calc(100vw - 80px);
+    max-height: 45vh;
+    overflow: auto;
+    background: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+    border: 1px solid var(--vscode-editorWidget-border, var(--vscode-inputValidation-errorBorder, rgba(255, 0, 0, 0.4)));
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    color: var(--vscode-errorForeground, #f48771);
+    padding: 10px 12px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.15s, visibility 0s 0.15s;
+  }
+
+  .error-indicator:hover .error-popup,
+  .error-indicator.hover .error-popup {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.15s;
+  }
+
+  .error-popup-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
   .sync-indicator {
     position: fixed;
     bottom: 16px;
@@ -332,35 +465,42 @@ export function getJsonParserWebviewContent(): string {
 </head>
 <body>
 <div class="container">
-  <div class="left-panel">
-    <div class="panel-header">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span>JSON 输入</span>
-        <label class="checkbox-wrapper">
-          <input type="checkbox" id="wrapCheckbox" checked>
-          <span class="checkbox-label">自动换行</span>
-        </label>
-      </div>
-      <div class="panel-header-actions">
-        <button class="btn btn-ghost" id="expandBtn">展开</button>
-        <button class="btn btn-ghost" id="minifyBtn">单行</button>
-        <button class="btn btn-ghost" id="exampleBtn">示例</button>
-        <button class="btn btn-ghost" id="clearBtn">清空</button>
-      </div>
+  <div class="toolbar">
+    <div class="window-tabs">
+      <button class="tab active" id="tabText">文本窗</button>
+      <button class="tab" id="tabTree">编辑窗</button>
     </div>
-    <div class="panel-content">
-      <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
+    <div class="toolbar-actions">
+      <label class="checkbox-wrapper">
+        <input type="checkbox" id="wrapCheckbox" checked>
+        <span class="checkbox-label">自动换行</span>
+      </label>
+      <label class="checkbox-wrapper">
+        <input type="checkbox" id="lineNumbersCheckbox">
+        <span class="checkbox-label">行号</span>
+      </label>
+      <button class="btn btn-ghost" id="expandBtn">展开</button>
+      <button class="btn btn-ghost" id="minifyBtn">收起</button>
+      <button class="btn btn-ghost" id="exampleBtn">示例</button>
+      <button class="btn btn-ghost" id="clearBtn">清空</button>
+      <button class="btn btn-ghost" id="copyBtn">复制</button>
     </div>
   </div>
 
-  <div class="right-panel">
-    <div class="panel-header">
-      解析结果（可编辑）
-      <div class="panel-header-actions">
-        <button class="btn btn-ghost" id="copyBtn">复制</button>
+  <div class="window-stage">
+    <div class="window-pane active" id="paneText">
+      <div class="text-editor" id="textEditor">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
+      </div>
+      <div class="error-indicator" id="errorIndicator">
+        <svg class="error-bulb" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
+        </svg>
+        <div class="error-popup" id="errorPopup"></div>
       </div>
     </div>
-    <div class="panel-content">
+    <div class="window-pane" id="paneTree">
       <div id="resultContainer" class="tree-container wrap-enabled">
         <div class="placeholder">等待输入 JSON...</div>
       </div>
@@ -375,11 +515,53 @@ export function getJsonParserWebviewContent(): string {
   const resultContainer = document.getElementById('resultContainer');
   const syncIndicator = document.getElementById('syncIndicator');
   const wrapCheckbox = document.getElementById('wrapCheckbox');
+  const lineNumbersCheckbox = document.getElementById('lineNumbersCheckbox');
+  const lineNumbers = document.getElementById('lineNumbers');
+  const textEditor = document.getElementById('textEditor');
+  const tabText = document.getElementById('tabText');
+  const tabTree = document.getElementById('tabTree');
+  const paneText = document.getElementById('paneText');
+  const paneTree = document.getElementById('paneTree');
+  const errorIndicator = document.getElementById('errorIndicator');
+  const errorPopup = document.getElementById('errorPopup');
 
   let currentData = null;
   let expandedNodes = new Set();
   let isUpdatingFromTree = false;
   let parseTimer = null;
+
+  // 窗口切换
+  function switchWindow(name) {
+    const isText = name === 'text';
+    tabText.classList.toggle('active', isText);
+    tabTree.classList.toggle('active', !isText);
+    paneText.classList.toggle('active', isText);
+    paneTree.classList.toggle('active', !isText);
+  }
+
+  function isTreeActive() {
+    return paneTree.classList.contains('active');
+  }
+
+  // 展开/收起所有树节点（保留根节点展开，便于查看第一层）
+  function expandAllTree() {
+    if (currentData === null) return;
+    expandedNodes.clear();
+    autoExpand(currentData, '');
+    renderTree();
+  }
+
+  function collapseAllTree() {
+    if (currentData === null) return;
+    expandedNodes.clear();
+    if (currentData !== null && typeof currentData === 'object') {
+      expandedNodes.add('');
+    }
+    renderTree();
+  }
+
+  tabText.addEventListener('click', () => switchWindow('text'));
+  tabTree.addEventListener('click', () => switchWindow('tree'));
 
   // 初始化自动换行状态
   const savedWrap = localStorage.getItem('jsonParser.wrapEnabled');
@@ -418,7 +600,32 @@ export function getJsonParserWebviewContent(): string {
     localStorage.setItem('jsonParser.wrapEnabled', String(enabled));
   });
 
+  // 行号
+  function updateLineNumbers() {
+    if (!lineNumbersCheckbox.checked) return;
+    const lines = input.value.split('\\n').length;
+    const nums = [];
+    for (let i = 1; i <= lines; i++) nums.push(i);
+    lineNumbers.textContent = nums.join('\\n');
+    lineNumbers.scrollTop = input.scrollTop;
+  }
+
+  lineNumbersCheckbox.addEventListener('change', () => {
+    const checked = lineNumbersCheckbox.checked;
+    textEditor.classList.toggle('show-line-numbers', checked);
+    resultContainer.classList.toggle('show-line-numbers', checked);
+    if (checked) {
+      updateLineNumbers();
+      updateTreeLineNumbers();
+    }
+  });
+
+  input.addEventListener('scroll', () => {
+    if (lineNumbersCheckbox.checked) lineNumbers.scrollTop = input.scrollTop;
+  });
+
   input.addEventListener('input', () => {
+    updateLineNumbers();
     clearTimeout(parseTimer);
     parseTimer = setTimeout(() => {
       isUpdatingFromTree = false;
@@ -427,6 +634,10 @@ export function getJsonParserWebviewContent(): string {
   });
 
   document.getElementById('expandBtn').addEventListener('click', () => {
+    if (isTreeActive()) {
+      expandAllTree();
+      return;
+    }
     if (currentData !== null) {
       input.value = JSON.stringify(currentData, null, 2);
     } else {
@@ -436,10 +647,15 @@ export function getJsonParserWebviewContent(): string {
       } catch (e) { return; }
     }
     isUpdatingFromTree = false;
+    updateLineNumbers();
     parseJSON();
   });
 
   document.getElementById('minifyBtn').addEventListener('click', () => {
+    if (isTreeActive()) {
+      collapseAllTree();
+      return;
+    }
     if (currentData !== null) {
       input.value = JSON.stringify(currentData);
     } else {
@@ -449,13 +665,14 @@ export function getJsonParserWebviewContent(): string {
       } catch (e) { return; }
     }
     isUpdatingFromTree = false;
+    updateLineNumbers();
     parseJSON();
   });
 
   document.getElementById('exampleBtn').addEventListener('click', () => {
     const example = {
-      name: "CodeKit For VSCode",
-      version: "0.0.2",
+      name: "CodeKit",
+      version: "0.0.3",
       description: "A toolkit of handy tools inside VS Code",
       features: [
         "JSON Parser - real-time JSON parsing and visualization",
@@ -464,7 +681,7 @@ export function getJsonParserWebviewContent(): string {
       ],
       stats: {
         tools: 2,
-        version: "0.0.2",
+        version: "0.0.3",
         stable: true
       },
       tags: ["vscode", "extension", "toolkit"],
@@ -479,6 +696,7 @@ export function getJsonParserWebviewContent(): string {
     };
     input.value = JSON.stringify(example, null, 2);
     isUpdatingFromTree = false;
+    updateLineNumbers();
     parseJSON();
   });
 
@@ -487,16 +705,29 @@ export function getJsonParserWebviewContent(): string {
     currentData = null;
     expandedNodes.clear();
     resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+    errorIndicator.classList.remove('show');
+    updateLineNumbers();
   });
 
   document.getElementById('copyBtn').addEventListener('click', () => {
-    if (currentData !== null) {
-      const text = JSON.stringify(currentData, null, 2);
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          showSyncIndicator('已复制到剪贴板');
-        });
+    let text;
+    if (isTreeActive()) {
+      if (currentData === null) {
+        showSyncIndicator('无数据可复制');
+        return;
       }
+      text = JSON.stringify(currentData, null, 2);
+    } else {
+      text = input.value;
+      if (!text.trim()) {
+        showSyncIndicator('无数据可复制');
+        return;
+      }
+    }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        showSyncIndicator('已复制到剪贴板');
+      });
     }
   });
 
@@ -507,6 +738,7 @@ export function getJsonParserWebviewContent(): string {
       currentData = null;
       expandedNodes.clear();
       resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+      errorIndicator.classList.remove('show');
       return;
     }
 
@@ -515,6 +747,7 @@ export function getJsonParserWebviewContent(): string {
       expandedNodes.clear();
       autoExpand(currentData, '');
       renderTree();
+      errorIndicator.classList.remove('show');
     } catch (e) {
       showError(e);
     }
@@ -546,6 +779,15 @@ export function getJsonParserWebviewContent(): string {
         el.style.whiteSpace = 'nowrap';
       });
     }
+    updateTreeLineNumbers();
+  }
+
+  // 编辑窗行号：根据每个 tree-item 的 offsetLeft 计算 CSS 变量，让行号左对齐
+  function updateTreeLineNumbers() {
+    if (!lineNumbersCheckbox.checked) return;
+    resultContainer.querySelectorAll('.tree-item').forEach(item => {
+      item.style.setProperty('--line-offset', (-item.offsetLeft + 12) + 'px');
+    });
   }
 
   function renderValue(value, path, key, depth) {
@@ -594,12 +836,12 @@ export function getJsonParserWebviewContent(): string {
     const isExpanded = expandedNodes.has(path);
     toggle.textContent = isExpanded ? '▼' : '▶';
     toggle.addEventListener('click', () => toggleNode(path));
-    item.appendChild(toggle);
 
     if (key !== null) {
       item.appendChild(createKeySpan(key, path));
       item.appendChild(createColon());
     }
+    item.appendChild(toggle);
 
     const count = document.createElement('span');
     count.className = 'tree-value';
@@ -642,12 +884,12 @@ export function getJsonParserWebviewContent(): string {
     const isExpanded = expandedNodes.has(path);
     toggle.textContent = isExpanded ? '▼' : '▶';
     toggle.addEventListener('click', () => toggleNode(path));
-    item.appendChild(toggle);
 
     if (key !== null) {
       item.appendChild(createKeySpan(key, path));
       item.appendChild(createColon());
     }
+    item.appendChild(toggle);
 
     const keys = Object.keys(obj);
     const count = document.createElement('span');
@@ -842,6 +1084,7 @@ export function getJsonParserWebviewContent(): string {
       if (input.value !== text) {
         input.value = text;
         showSyncIndicator('已同步');
+        updateLineNumbers();
       }
       setTimeout(() => { isUpdatingFromTree = false; }, 500);
     }
@@ -879,6 +1122,7 @@ export function getJsonParserWebviewContent(): string {
     } else if (type === 'number') {
       input.value = String(currentValue);
     }
+    input.style.width = Math.max(input.value.length + 2, 6) + 'ch';
 
     valueSpan.textContent = '';
     valueSpan.appendChild(input);
@@ -958,6 +1202,7 @@ export function getJsonParserWebviewContent(): string {
     const input = document.createElement('input');
     input.className = 'edit-input';
     input.value = oldKey;
+    input.style.width = Math.max(input.value.length + 2, 6) + 'ch';
 
     keySpan.textContent = '';
     keySpan.appendChild(input);
@@ -1041,7 +1286,6 @@ export function getJsonParserWebviewContent(): string {
   }
 
   function deleteNode(path) {
-    if (!confirm('确认删除该节点?')) return;
     expandedNodes.forEach(p => {
       if (p === path || p.startsWith(path + '.')) {
         expandedNodes.delete(p);
@@ -1064,28 +1308,39 @@ export function getJsonParserWebviewContent(): string {
   }
 
   function showError(error) {
+    const errorMessage = error.message;
+    const lineMatch = errorMessage.match(/line (\\d+)/);
+    const columnMatch = errorMessage.match(/column (\\d+)/);
+    const locationText = (lineMatch && columnMatch)
+      ? '行 ' + lineMatch[1] + ', 列 ' + columnMatch[1]
+      : '';
+
+    // 文本窗左下角小灯泡（hover 显示错误详情）
+    errorPopup.innerHTML = '';
+    const popTitle = document.createElement('div');
+    popTitle.className = 'error-popup-title';
+    popTitle.textContent = 'JSON 解析失败' + (locationText ? ' · ' + locationText : '');
+    errorPopup.appendChild(popTitle);
+    const popMsg = document.createElement('div');
+    popMsg.textContent = errorMessage;
+    errorPopup.appendChild(popMsg);
+    errorIndicator.classList.add('show');
+
+    // 编辑窗错误容器（用户手动切到编辑窗时可见）
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-container';
-
     const title = document.createElement('div');
     title.className = 'error-title';
     title.textContent = 'JSON 解析失败';
     errorDiv.appendChild(title);
-
     const message = document.createElement('div');
     message.className = 'error-message';
-
-    const errorMessage = error.message;
-    const lineMatch = errorMessage.match(/line (\\d+)/);
-    const columnMatch = errorMessage.match(/column (\\d+)/);
-
     if (lineMatch && columnMatch) {
       message.innerHTML = '<strong>位置:</strong> 行 ' + lineMatch[1] + ', 列 ' + columnMatch[1] + '<br><br>';
       message.innerHTML += '<strong>错误:</strong> ' + escapeHtml(errorMessage);
     } else {
       message.textContent = errorMessage;
     }
-
     errorDiv.appendChild(message);
     resultContainer.innerHTML = '';
     resultContainer.appendChild(errorDiv);

@@ -1,4 +1,4 @@
-# CodeKit For VSCode 设计文档 v0.0.2
+# CodeKit 设计文档 v0.0.2
 
 ## 目标
 
