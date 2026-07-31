@@ -286,7 +286,9 @@ export function getJsonParserWebviewContent(): string {
     <div class="panel-header">
       JSON 输入
       <div class="panel-header-actions">
-        <button class="btn btn-ghost" id="formatBtn">格式化</button>
+        <button class="btn btn-ghost" id="expandBtn">展开</button>
+        <button class="btn btn-ghost" id="minifyBtn">单行</button>
+        <button class="btn btn-ghost" id="exampleBtn">示例</button>
         <button class="btn btn-ghost" id="clearBtn">清空</button>
       </div>
     </div>
@@ -330,10 +332,54 @@ export function getJsonParserWebviewContent(): string {
     }, 300);
   });
 
-  document.getElementById('formatBtn').addEventListener('click', () => {
+  document.getElementById('expandBtn').addEventListener('click', () => {
     if (currentData !== null) {
       input.value = JSON.stringify(currentData, null, 2);
+    } else {
+      try {
+        const parsed = JSON.parse(input.value);
+        input.value = JSON.stringify(parsed, null, 2);
+      } catch (e) { /* ignore */ }
     }
+  });
+
+  document.getElementById('minifyBtn').addEventListener('click', () => {
+    if (currentData !== null) {
+      input.value = JSON.stringify(currentData);
+    } else {
+      try {
+        const parsed = JSON.parse(input.value);
+        input.value = JSON.stringify(parsed);
+      } catch (e) { /* ignore */ }
+    }
+  });
+
+  document.getElementById('exampleBtn').addEventListener('click', () => {
+    const example = {
+      name: "CodeKit For VSCode",
+      version: "0.0.2",
+      description: "A toolkit of handy tools inside VS Code",
+      features: [
+        "JSON Parser - real-time JSON parsing and visualization",
+        "Hello World - welcome animation",
+        "Extensible tool architecture"
+      ],
+      stats: {
+        tools: 2,
+        version: "0.0.2",
+        stable: true
+      },
+      tags: ["vscode", "extension", "toolkit"],
+      empty: null,
+      nested: {
+        level1: {
+          level2: {
+            value: "deep"
+          }
+        }
+      }
+    };
+    input.value = JSON.stringify(example, null, 2);
   });
 
   document.getElementById('clearBtn').addEventListener('click', () => {
