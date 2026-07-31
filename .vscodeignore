@@ -1,0 +1,8 @@
+docs/**
+.vscode/**
+src/**
+.gitignore
+release/**
+**/*.map
+**/*.ts
+node_modules/.cache/**

@@ -1,0 +1,76 @@
+{
+  "name": "code-kit-for-vscode",
+  "displayName": "CodeKit For VSCode",
+  "description": "A toolkit of handy tools inside VS Code.",
+  "version": "0.0.1",
+  "publisher": "zhanwangfeng",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhanwangfeng/CodeKitForVSCode.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onView:codeKit.views.tools"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeKit",
+          "title": "CodeKit",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codeKit": [
+        {
+          "id": "codeKit.views.tools",
+          "name": "Tools",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "codeKit.helloWorld",
+        "title": "Hello World",
+        "category": "CodeKit"
+      },
+      {
+        "command": "codeKit.refreshTools",
+        "title": "Refresh Tools",
+        "category": "CodeKit",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codeKit.refreshTools",
+          "when": "view == codeKit.views.tools",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --out release"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.4.0"
+  }
+}
