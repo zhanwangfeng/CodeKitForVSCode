@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zhanwangfeng/CodeKitForVSCode.git"
+    "url": "https://github.com/zhanwangfeng/CodeKit.git"
   },
   "engines": {
     "vscode": "^1.80.0"
