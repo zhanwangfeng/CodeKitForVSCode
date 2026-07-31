@@ -339,8 +339,10 @@ export function getJsonParserWebviewContent(): string {
       try {
         const parsed = JSON.parse(input.value);
         input.value = JSON.stringify(parsed, null, 2);
-      } catch (e) { /* ignore */ }
+      } catch (e) { return; }
     }
+    isUpdatingFromTree = false;
+    parseJSON();
   });
 
   document.getElementById('minifyBtn').addEventListener('click', () => {
@@ -350,8 +352,10 @@ export function getJsonParserWebviewContent(): string {
       try {
         const parsed = JSON.parse(input.value);
         input.value = JSON.stringify(parsed);
-      } catch (e) { /* ignore */ }
+      } catch (e) { return; }
     }
+    isUpdatingFromTree = false;
+    parseJSON();
   });
 
   document.getElementById('exampleBtn').addEventListener('click', () => {
@@ -380,6 +384,8 @@ export function getJsonParserWebviewContent(): string {
       }
     };
     input.value = JSON.stringify(example, null, 2);
+    isUpdatingFromTree = false;
+    parseJSON();
   });
 
   document.getElementById('clearBtn').addEventListener('click', () => {
