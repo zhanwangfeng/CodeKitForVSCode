@@ -17,6 +17,7 @@ CodeKit For VSCode 是一款基于 VSCode Extension API 打造的工具集扩展
 | 工具 | 说明 |
 | --- | --- |
 | Hello World | 打开一个带动画效果的 WebView 标签页，作为首个示例工具 |
+| JSON Parser | 实时解析 JSON 字符串，左右分栏展示可编辑的树状结构 |
 
 ## 项目结构
 
@@ -29,9 +30,11 @@ CodeKitForVSCode/
 │   ├── tools/
 │   │   ├── tool.ts             # Tool 接口定义
 │   │   ├── helloWorld.ts       # Hello World 工具
+│   │   ├── jsonParser.ts       # JSON Parser 工具
 │   │   └── index.ts            # 工具注册表
 │   └── webviews/
-│       └── helloWorldWebview.ts # WebView 页面内容
+│       ├── helloWorldWebview.ts # WebView 页面内容
+│       └── jsonParserWebview.ts # JSON 解析 WebView 页面
 ├── resources/
 │   └── icon.svg                # 活动栏自定义图标
 └── docs/
@@ -86,6 +89,7 @@ npm run package
 ## 版本
 
 - **0.0.1**：活动栏图标入口 + Tree View 工具列表 + Hello World 动画工具
+- **0.0.2**：JSON Parser 工具（实时解析、可编辑树状图、展开/单行/示例按钮、自动换行）
 
 ## License
 

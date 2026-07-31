@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit For VSCode",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "repository": {
