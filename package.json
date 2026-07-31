@@ -65,7 +65,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package --out release"
+    "package": "vsce package --out release/"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
