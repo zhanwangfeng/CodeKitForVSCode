@@ -718,7 +718,11 @@ export function getJsonParserWebviewContent(): string {
     input.focus();
     input.select();
 
+    let handled = false;
+
     const commit = () => {
+      if (handled) return;
+      handled = true;
       let newVal;
       if (type === 'number') {
         newVal = parseFloat(input.value);
@@ -734,16 +738,22 @@ export function getJsonParserWebviewContent(): string {
     };
 
     const cancel = () => {
+      if (handled) return;
+      handled = true;
       renderTree();
     };
 
-    input.addEventListener('blur', commit);
+    input.addEventListener('blur', () => {
+      setTimeout(() => { if (!handled) commit(); }, 0);
+    });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        input.removeEventListener('blur', commit);
+        e.preventDefault();
+        e.stopPropagation();
         commit();
       } else if (e.key === 'Escape') {
-        input.removeEventListener('blur', commit);
+        e.preventDefault();
+        e.stopPropagation();
         cancel();
       }
     });
@@ -790,7 +800,11 @@ export function getJsonParserWebviewContent(): string {
     input.focus();
     input.select();
 
+    let handled = false;
+
     const commit = () => {
+      if (handled) return;
+      handled = true;
       const newKey = input.value.trim();
       if (!newKey || newKey === oldKey) {
         renderTree();
@@ -815,16 +829,22 @@ export function getJsonParserWebviewContent(): string {
     };
 
     const cancel = () => {
+      if (handled) return;
+      handled = true;
       renderTree();
     };
 
-    input.addEventListener('blur', commit);
+    input.addEventListener('blur', () => {
+      setTimeout(() => { if (!handled) commit(); }, 0);
+    });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        input.removeEventListener('blur', commit);
+        e.preventDefault();
+        e.stopPropagation();
         commit();
       } else if (e.key === 'Escape') {
-        input.removeEventListener('blur', commit);
+        e.preventDefault();
+        e.stopPropagation();
         cancel();
       }
     });
