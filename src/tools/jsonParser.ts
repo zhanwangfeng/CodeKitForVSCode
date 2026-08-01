@@ -1,11 +1,16 @@
 import * as vscode from 'vscode';
+import { t } from '../i18n';
 import { getJsonParserWebviewContent } from '../webviews/jsonParserWebview';
 import { Tool } from './tool';
 
 export const jsonParserTool: Tool = {
   id: 'json-parser',
-  name: 'JSON Parser',
-  description: 'JSON解析工具：实时解析JSON字符串，可视化展示',
+  get name() {
+    return t('tool.jsonParser.name');
+  },
+  get description() {
+    return t('tool.jsonParser.description');
+  },
   commandId: 'codeKit.jsonParser',
   icon: new vscode.ThemeIcon('json'),
   run() {
