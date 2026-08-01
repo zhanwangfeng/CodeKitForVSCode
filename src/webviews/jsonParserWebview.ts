@@ -1,4 +1,16 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 export function getJsonParserWebviewContent(): string {
+  const prismCore = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-core.min.js'),
+    'utf8'
+  );
+  const prismJson = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-json.min.js'),
+    'utf8'
+  );
+
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -155,18 +167,25 @@ export function getJsonParserWebviewContent(): string {
 
   .text-editor.show-line-numbers .line-numbers { display: block; }
 
-  .text-editor.show-line-numbers textarea {
+  .text-area-wrapper {
+    flex: 1;
+    position: relative;
+    height: 100%;
+  }
+
+  .text-editor.show-line-numbers .text-area-wrapper textarea,
+  .text-editor.show-line-numbers .text-area-wrapper .highlight-layer {
     border-left: none;
     border-radius: 0 3px 3px 0;
   }
 
   textarea {
     display: block;
-    flex: 1;
-    width: auto;
+    width: 100%;
     height: 100%;
-    background: var(--vscode-editor-background);
-    color: var(--vscode-editor-foreground);
+    background: transparent;
+    color: transparent;
+    caret-color: var(--vscode-editor-foreground);
     border: 1px solid var(--vscode-input-border);
     padding: 12px;
     font-family: 'Consolas', 'Courier New', monospace;
@@ -176,6 +195,8 @@ export function getJsonParserWebviewContent(): string {
     line-height: 1.6;
     white-space: pre;
     overflow-x: auto;
+    position: relative;
+    z-index: 2;
   }
 
   textarea.wrap-enabled {
@@ -187,6 +208,48 @@ export function getJsonParserWebviewContent(): string {
   textarea:focus {
     border-color: var(--vscode-focusBorder);
   }
+
+  textarea::placeholder {
+    color: var(--vscode-input-placeholderForeground);
+  }
+
+  textarea::selection {
+    background: var(--vscode-editor-selectionBackground);
+  }
+
+  .highlight-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid transparent;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    background: var(--vscode-editor-background);
+    border-radius: 3px;
+  }
+
+  .highlight-layer.wrap-enabled {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .highlight-layer .token.property { color: var(--vscode-json-property-syntax, #9cdcfe); }
+  .highlight-layer .token.string { color: var(--vscode-json-string-syntax, #ce9178); }
+  .highlight-layer .token.number { color: var(--vscode-json-number-syntax, #b5cea8); }
+  .highlight-layer .token.boolean { color: var(--vscode-json-boolean-syntax, #569cd6); }
+  .highlight-layer .token.null { color: var(--vscode-json-null-foreground, #569cd6); }
+  .highlight-layer .token.punctuation { color: var(--vscode-editor-foreground, #d4d4d4); }
+  .highlight-layer .token.operator { color: var(--vscode-editor-foreground, #d4d4d4); }
+  .highlight-layer .token.comment { color: #6a9955; }
 
   .tree-container.wrap-enabled .tree-key,
   .tree-container.wrap-enabled .tree-value {
@@ -251,7 +314,7 @@ export function getJsonParserWebviewContent(): string {
   }
 
   .tree-key {
-    color: var(--vscode-json-property-syntax);
+    color: var(--vscode-json-property-syntax, #9cdcfe);
     font-weight: 500;
     cursor: pointer;
     border-radius: 3px;
@@ -281,10 +344,10 @@ export function getJsonParserWebviewContent(): string {
     outline: 1px dashed var(--vscode-panel-border);
   }
 
-  .tree-value.string { color: var(--vscode-json-string-syntax); }
-  .tree-value.number { color: var(--vscode-json-number-syntax); }
-  .tree-value.boolean { color: var(--vscode-json-boolean-syntax); }
-  .tree-value.null { color: var(--vscode-json-null-foreground); font-style: italic; }
+  .tree-value.string { color: var(--vscode-json-string-syntax, #ce9178); }
+  .tree-value.number { color: var(--vscode-json-number-syntax, #b5cea8); }
+  .tree-value.boolean { color: var(--vscode-json-boolean-syntax, #569cd6); }
+  .tree-value.null { color: var(--vscode-json-null-foreground, #569cd6); font-style: italic; }
   .tree-value.empty-object,
   .tree-value.empty-array { color: var(--vscode-editor-foreground); opacity: 0.5; cursor: default; }
   .tree-value.empty-object:hover,
@@ -491,7 +554,10 @@ export function getJsonParserWebviewContent(): string {
     <div class="window-pane active" id="paneText">
       <div class="text-editor" id="textEditor">
         <div class="line-numbers" id="lineNumbers"></div>
-        <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
+        <div class="text-area-wrapper">
+          <pre class="highlight-layer" id="highlightLayer" aria-hidden="true"></pre>
+          <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
+        </div>
       </div>
       <div class="error-indicator" id="errorIndicator">
         <svg class="error-bulb" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
@@ -511,12 +577,17 @@ export function getJsonParserWebviewContent(): string {
 <div class="sync-indicator" id="syncIndicator">已同步</div>
 
 <script>
+  // Prism.js core + JSON language definition (inlined)
+  ${prismCore}
+  ${prismJson}
+
   const input = document.getElementById('jsonInput');
   const resultContainer = document.getElementById('resultContainer');
   const syncIndicator = document.getElementById('syncIndicator');
   const wrapCheckbox = document.getElementById('wrapCheckbox');
   const lineNumbersCheckbox = document.getElementById('lineNumbersCheckbox');
   const lineNumbers = document.getElementById('lineNumbers');
+  const highlightLayer = document.getElementById('highlightLayer');
   const textEditor = document.getElementById('textEditor');
   const tabText = document.getElementById('tabText');
   const tabTree = document.getElementById('tabTree');
@@ -568,6 +639,7 @@ export function getJsonParserWebviewContent(): string {
   const wrapEnabled = savedWrap === null ? true : savedWrap === 'true';
   wrapCheckbox.checked = wrapEnabled;
   input.classList.toggle('wrap-enabled', wrapEnabled);
+  highlightLayer.classList.toggle('wrap-enabled', wrapEnabled);
   resultContainer.classList.toggle('wrap-enabled', wrapEnabled);
   if (!wrapEnabled) {
     resultContainer.querySelectorAll('.tree-item').forEach(item => {
@@ -581,6 +653,7 @@ export function getJsonParserWebviewContent(): string {
   wrapCheckbox.addEventListener('change', () => {
     const enabled = wrapCheckbox.checked;
     input.classList.toggle('wrap-enabled', enabled);
+    highlightLayer.classList.toggle('wrap-enabled', enabled);
     resultContainer.classList.toggle('wrap-enabled', enabled);
     if (enabled) {
       resultContainer.querySelectorAll('.tree-item').forEach(item => {
@@ -610,6 +683,17 @@ export function getJsonParserWebviewContent(): string {
     lineNumbers.scrollTop = input.scrollTop;
   }
 
+  // JSON 语法高亮 (Prism.js)
+  function highlightJSON(text) {
+    return Prism.highlight(text, Prism.languages.json, 'json') || '&nbsp;';
+  }
+
+  function updateHighlight() {
+    highlightLayer.innerHTML = highlightJSON(input.value);
+    highlightLayer.scrollTop = input.scrollTop;
+    highlightLayer.scrollLeft = input.scrollLeft;
+  }
+
   lineNumbersCheckbox.addEventListener('change', () => {
     const checked = lineNumbersCheckbox.checked;
     textEditor.classList.toggle('show-line-numbers', checked);
@@ -621,10 +705,13 @@ export function getJsonParserWebviewContent(): string {
   });
 
   input.addEventListener('scroll', () => {
+    highlightLayer.scrollTop = input.scrollTop;
+    highlightLayer.scrollLeft = input.scrollLeft;
     if (lineNumbersCheckbox.checked) lineNumbers.scrollTop = input.scrollTop;
   });
 
   input.addEventListener('input', () => {
+    updateHighlight();
     updateLineNumbers();
     clearTimeout(parseTimer);
     parseTimer = setTimeout(() => {
@@ -647,6 +734,7 @@ export function getJsonParserWebviewContent(): string {
       } catch (e) { return; }
     }
     isUpdatingFromTree = false;
+    updateHighlight();
     updateLineNumbers();
     parseJSON();
   });
@@ -665,6 +753,7 @@ export function getJsonParserWebviewContent(): string {
       } catch (e) { return; }
     }
     isUpdatingFromTree = false;
+    updateHighlight();
     updateLineNumbers();
     parseJSON();
   });
@@ -696,6 +785,7 @@ export function getJsonParserWebviewContent(): string {
     };
     input.value = JSON.stringify(example, null, 2);
     isUpdatingFromTree = false;
+    updateHighlight();
     updateLineNumbers();
     parseJSON();
   });
@@ -706,6 +796,7 @@ export function getJsonParserWebviewContent(): string {
     expandedNodes.clear();
     resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
     errorIndicator.classList.remove('show');
+    updateHighlight();
     updateLineNumbers();
   });
 
@@ -1084,6 +1175,7 @@ export function getJsonParserWebviewContent(): string {
       if (input.value !== text) {
         input.value = text;
         showSyncIndicator('已同步');
+        updateHighlight();
         updateLineNumbers();
       }
       setTimeout(() => { isUpdatingFromTree = false; }, 500);
@@ -1351,6 +1443,9 @@ export function getJsonParserWebviewContent(): string {
     div.textContent = text;
     return div.innerHTML;
   }
+
+  // 初始化高亮
+  updateHighlight();
 </script>
 </body>
 </html>`;
