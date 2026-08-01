@@ -1,6 +1,10 @@
+import { getLocale, t } from '../i18n';
+
 export function getHelloWorldWebviewContent(): string {
+  const locale = getLocale();
+
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${locale === 'zh-cn' ? 'zh-CN' : 'en'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +22,32 @@ export function getHelloWorldWebviewContent(): string {
     overflow: hidden;
     font-family: "Segoe UI", system-ui, sans-serif;
     background: radial-gradient(circle at 50% 45%, #14163a, #05060f 70%);
+  }
+  .lang-switch {
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+  }
+  .lang-btn {
+    padding: 5px 12px;
+    font-size: 12px;
+    font-family: inherit;
+    color: #c9d2ff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .lang-btn:hover { background: rgba(255, 255, 255, 0.12); }
+  .lang-btn.active {
+    color: #05060f;
+    background: linear-gradient(135deg, #ff6ec4, #4adede);
+    border-color: transparent;
+    font-weight: 600;
   }
   .card {
     max-width: 720px;
@@ -96,18 +126,32 @@ export function getHelloWorldWebviewContent(): string {
 </style>
 </head>
 <body>
+  <div class="lang-switch" role="group" aria-label="${t('hello.lang.label')}">
+    <button class="lang-btn${locale === 'en' ? ' active' : ''}" id="langEn" type="button">${t('hello.lang.en')}</button>
+    <button class="lang-btn${locale === 'zh-cn' ? ' active' : ''}" id="langZh" type="button">${t('hello.lang.zh')}</button>
+  </div>
   <div class="hello"></div>
   <div class="card">
-    <h2>CodeKit</h2>
-    <p>一个把常用开发小工具收进侧边栏的 VSCode 扩展工具箱，随时取用。</p>
+    <h2>${t('hello.title')}</h2>
+    <p>${t('hello.intro')}</p>
     <ul>
-      <li>Activity Bar 自定义图标入口，一键进入工具面板</li>
-      <li>主侧边栏 Tree View 树形列表，集中展示全部工具</li>
-      <li>工具可在编辑器主区域打开 WebView 标签页，支持动画与交互</li>
-      <li>新增工具只需实现 Tool 接口并登记，零运行时依赖</li>
+      <li>${t('hello.feature.1')}</li>
+      <li>${t('hello.feature.2')}</li>
+      <li>${t('hello.feature.3')}</li>
+      <li>${t('hello.feature.4')}</li>
     </ul>
   </div>
   <script>
+    const vscode = acquireVsCodeApi();
+    const currentLocale = ${JSON.stringify(locale)};
+
+    document.getElementById('langEn').addEventListener('click', () => {
+      if (currentLocale !== 'en') vscode.postMessage({ type: 'setLocale', locale: 'en' });
+    });
+    document.getElementById('langZh').addEventListener('click', () => {
+      if (currentLocale !== 'zh-cn') vscode.postMessage({ type: 'setLocale', locale: 'zh-cn' });
+    });
+
     const container = document.querySelector('.hello');
     const text = 'Hello World';
     [...text].forEach((ch, i) => {

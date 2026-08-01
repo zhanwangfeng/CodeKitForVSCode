@@ -11,6 +11,7 @@ CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通�
 - **WebView 展示**：工具可在编辑器主区域打开 WebView 标签页，支持炫酷的动画与交互
 - **易于扩展**：新增工具只需实现 `Tool` 接口并在注册表中登记，即可出现在列表
 - **轻量依赖**：WebView 页面基于原生 HTML/CSS/JS，仅内联 Prism.js（~8KB）用于 JSON 语法高亮
+- **多语言**：插件内部自管理英文 / 简体中文双语，在 Hello World 工具内切换，JSON Parser 等随语言显示
 
 ## 内置工具
 
@@ -32,8 +33,10 @@ CodeKitForVSCode/
 │   │   ├── helloWorld.ts       # Hello World 工具
 │   │   ├── jsonParser.ts       # JSON Parser 工具
 │   │   └── index.ts            # 工具注册表
+│   ├── i18n/
+│   │   └── index.ts            # 内部 i18n 模块（双语字典 + 语言状态 + 持久化）
 │   └── webviews/
-│       ├── helloWorldWebview.ts # WebView 页面内容
+│       ├── helloWorldWebview.ts # WebView 页面内容（含语言选择器）
 │       └── jsonParserWebview.ts # JSON 解析 WebView 页面
 ├── resources/
 │   └── icon.svg                # 活动栏自定义图标
@@ -92,6 +95,7 @@ npm run package
 - **0.0.2**：JSON Parser 工具（实时解析、可编辑树状图、展开/单行/示例按钮、自动换行）
 - **0.0.3**：JSON 编辑器优化（重叠双窗口切换、共用工具栏、行号显示、错误指示灯泡、展开/收起双模式）
 - **0.0.4**：JSON 语法高亮（Prism.js 文本窗高亮 + 编辑窗类型着色，与 VSCode 内置 JSON 高亮一致）
+- **0.0.5**：多语言支持（英文 / 简体中文，Hello World 内切换，插件内部自管理）
 
 ## License
 

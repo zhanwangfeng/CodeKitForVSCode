@@ -1,5 +1,21 @@
 # Change Log
 
+## [0.0.5] - 2026-08-01
+
+### Added
+
+- **多语言支持（i18n）**：插件内部自管理的英文 / 简体中文双语切换，不依赖 `package.nls`
+  - 新增 `src/i18n/index.ts` 统一管理所有可翻译文案的双语字典 + 语言状态 + 持久化
+  - 语言设置入口置于 Hello World WebView 右上角（English / 简体中文 按钮）
+  - 选择经 `postMessage` 通知扩展，写入 `context.globalState`（跨会话持久化）
+  - JSON Parser 打开时按当前语言构建：静态文案直接渲染，动态提示注入已解析 i18n 对象
+  - 工具元数据（`Tool.name`/`Tool.description`）改用 getter 动态返回当前语言，切换后刷新 Tree View
+
+### Changed
+
+- Hello World / JSON Parser WebView 全部用户可见文案（标题、按钮、占位符、提示、错误信息、树节点 hover 提示）改为英文源串 + 中文翻译
+- `package.json` 贡献项（命令标题/视图名）保持英文，不与内部 i18n 混合
+
 ## [0.0.4] - 2026-07-31
 
 ### Added

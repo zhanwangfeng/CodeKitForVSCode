@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLocale, t } from '../i18n';
 
 export function getJsonParserWebviewContent(): string {
   const prismCore = fs.readFileSync(
@@ -11,8 +12,32 @@ export function getJsonParserWebviewContent(): string {
     'utf8'
   );
 
+  // <script> 内动态文案：按当前语言解析后注入
+  const i18n = {
+    waiting: t('json.waiting'),
+    synced: t('json.synced'),
+    noData: t('json.noData'),
+    copied: t('json.copied'),
+    parseFailed: t('json.parseFailed'),
+    location: t('json.location'),
+    error: t('json.error'),
+    line: t('json.line'),
+    column: t('json.column'),
+    changeNullPrompt: t('json.changeNullPrompt'),
+    editKey: t('json.editKey'),
+    editString: t('json.editString'),
+    editNumber: t('json.editNumber'),
+    toggleBool: t('json.toggleBool'),
+    changeType: t('json.changeType'),
+    delete: t('json.delete'),
+    addProperty: t('json.addProperty'),
+    addElement: t('json.addElement'),
+  };
+  const i18nSource = JSON.stringify(i18n).replace(/</g, '\\u003c');
+  const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
+
   return `<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="${langAttr}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -530,23 +555,23 @@ export function getJsonParserWebviewContent(): string {
 <div class="container">
   <div class="toolbar">
     <div class="window-tabs">
-      <button class="tab active" id="tabText">文本窗</button>
-      <button class="tab" id="tabTree">编辑窗</button>
+      <button class="tab active" id="tabText">${t('json.tabText')}</button>
+      <button class="tab" id="tabTree">${t('json.tabTree')}</button>
     </div>
     <div class="toolbar-actions">
       <label class="checkbox-wrapper">
         <input type="checkbox" id="wrapCheckbox" checked>
-        <span class="checkbox-label">自动换行</span>
+        <span class="checkbox-label">${t('json.wrap')}</span>
       </label>
       <label class="checkbox-wrapper">
         <input type="checkbox" id="lineNumbersCheckbox">
-        <span class="checkbox-label">行号</span>
+        <span class="checkbox-label">${t('json.lineNumbers')}</span>
       </label>
-      <button class="btn btn-ghost" id="expandBtn">展开</button>
-      <button class="btn btn-ghost" id="minifyBtn">收起</button>
-      <button class="btn btn-ghost" id="exampleBtn">示例</button>
-      <button class="btn btn-ghost" id="clearBtn">清空</button>
-      <button class="btn btn-ghost" id="copyBtn">复制</button>
+      <button class="btn btn-ghost" id="expandBtn">${t('json.expand')}</button>
+      <button class="btn btn-ghost" id="minifyBtn">${t('json.minify')}</button>
+      <button class="btn btn-ghost" id="exampleBtn">${t('json.example')}</button>
+      <button class="btn btn-ghost" id="clearBtn">${t('json.clear')}</button>
+      <button class="btn btn-ghost" id="copyBtn">${t('json.copy')}</button>
     </div>
   </div>
 
@@ -556,7 +581,7 @@ export function getJsonParserWebviewContent(): string {
         <div class="line-numbers" id="lineNumbers"></div>
         <div class="text-area-wrapper">
           <pre class="highlight-layer" id="highlightLayer" aria-hidden="true"></pre>
-          <textarea id="jsonInput" placeholder="在此输入 JSON 字符串..." class="wrap-enabled"></textarea>
+          <textarea id="jsonInput" placeholder="${t('json.placeholder')}" class="wrap-enabled"></textarea>
         </div>
       </div>
       <div class="error-indicator" id="errorIndicator">
@@ -568,18 +593,21 @@ export function getJsonParserWebviewContent(): string {
     </div>
     <div class="window-pane" id="paneTree">
       <div id="resultContainer" class="tree-container wrap-enabled">
-        <div class="placeholder">等待输入 JSON...</div>
+        <div class="placeholder">${t('json.waiting')}</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="sync-indicator" id="syncIndicator">已同步</div>
+<div class="sync-indicator" id="syncIndicator">${t('json.synced')}</div>
 
 <script>
   // Prism.js core + JSON language definition (inlined)
   ${prismCore}
   ${prismJson}
+
+  // 本地化文案（按打开时的语言解析注入）
+  const i18n = ${i18nSource};
 
   const input = document.getElementById('jsonInput');
   const resultContainer = document.getElementById('resultContainer');
@@ -794,7 +822,7 @@ export function getJsonParserWebviewContent(): string {
     input.value = '';
     currentData = null;
     expandedNodes.clear();
-    resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+    resultContainer.innerHTML = '<div class="placeholder">' + i18n.waiting + '</div>';
     errorIndicator.classList.remove('show');
     updateHighlight();
     updateLineNumbers();
@@ -804,20 +832,20 @@ export function getJsonParserWebviewContent(): string {
     let text;
     if (isTreeActive()) {
       if (currentData === null) {
-        showSyncIndicator('无数据可复制');
+        showSyncIndicator(i18n.noData);
         return;
       }
       text = JSON.stringify(currentData, null, 2);
     } else {
       text = input.value;
       if (!text.trim()) {
-        showSyncIndicator('无数据可复制');
+        showSyncIndicator(i18n.noData);
         return;
       }
     }
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(() => {
-        showSyncIndicator('已复制到剪贴板');
+        showSyncIndicator(i18n.copied);
       });
     }
   });
@@ -828,7 +856,7 @@ export function getJsonParserWebviewContent(): string {
     if (!text) {
       currentData = null;
       expandedNodes.clear();
-      resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+      resultContainer.innerHTML = '<div class="placeholder">' + i18n.waiting + '</div>';
       errorIndicator.classList.remove('show');
       return;
     }
@@ -857,7 +885,7 @@ export function getJsonParserWebviewContent(): string {
 
   function renderTree() {
     if (currentData === null) {
-      resultContainer.innerHTML = '<div class="placeholder">等待输入 JSON...</div>';
+      resultContainer.innerHTML = '<div class="placeholder">' + i18n.waiting + '</div>';
       return;
     }
     resultContainer.innerHTML = '';
@@ -1018,7 +1046,7 @@ export function getJsonParserWebviewContent(): string {
     const keySpan = document.createElement('span');
     keySpan.className = 'tree-key';
     keySpan.textContent = key;
-    keySpan.title = '点击编辑键名';
+    keySpan.title = i18n.editKey;
     keySpan.addEventListener('click', (e) => {
       e.stopPropagation();
       editKey(keySpan, parentPath, key);
@@ -1039,28 +1067,28 @@ export function getJsonParserWebviewContent(): string {
 
     if (type === 'string') {
       valueSpan.textContent = '"' + escapeHtml(value) + '"';
-      valueSpan.title = '点击编辑字符串';
+      valueSpan.title = i18n.editString;
       valueSpan.addEventListener('click', (e) => {
         e.stopPropagation();
         editPrimitive(valueSpan, path, 'string');
       });
     } else if (type === 'number') {
       valueSpan.textContent = String(value);
-      valueSpan.title = '点击编辑数字';
+      valueSpan.title = i18n.editNumber;
       valueSpan.addEventListener('click', (e) => {
         e.stopPropagation();
         editPrimitive(valueSpan, path, 'number');
       });
     } else if (type === 'boolean') {
       valueSpan.textContent = value ? 'true' : 'false';
-      valueSpan.title = '点击切换 true/false';
+      valueSpan.title = i18n.toggleBool;
       valueSpan.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleBoolean(path);
       });
     } else if (type === 'null') {
       valueSpan.textContent = 'null';
-      valueSpan.title = '点击改为其他类型';
+      valueSpan.title = i18n.changeType;
       valueSpan.addEventListener('click', (e) => {
         e.stopPropagation();
         changeNullType(path);
@@ -1077,7 +1105,7 @@ export function getJsonParserWebviewContent(): string {
     if (key !== null) {
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'action-btn delete';
-      deleteBtn.title = '删除';
+      deleteBtn.title = i18n.delete;
       deleteBtn.textContent = '\u00d7';
       deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1087,7 +1115,7 @@ export function getJsonParserWebviewContent(): string {
     } else {
       const addBtn = document.createElement('button');
       addBtn.className = 'action-btn';
-      addBtn.title = path && getValueAtPath(path) !== null && typeof getValueAtPath(path) === 'object' && !Array.isArray(getValueAtPath(path)) ? '添加属性' : '添加元素';
+      addBtn.title = path && getValueAtPath(path) !== null && typeof getValueAtPath(path) === 'object' && !Array.isArray(getValueAtPath(path)) ? i18n.addProperty : i18n.addElement;
       addBtn.textContent = '+';
       addBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1174,7 +1202,7 @@ export function getJsonParserWebviewContent(): string {
       const text = JSON.stringify(currentData, null, 2);
       if (input.value !== text) {
         input.value = text;
-        showSyncIndicator('已同步');
+        showSyncIndicator(i18n.synced);
         updateHighlight();
         updateLineNumbers();
       }
@@ -1267,7 +1295,7 @@ export function getJsonParserWebviewContent(): string {
   }
 
   function changeNullType(path) {
-    const val = prompt('null 改为:', '输入 string / number / boolean / object / array');
+    const val = prompt(i18n.changeNullPrompt, 'string / number / boolean / object / array');
     if (val === null) return;
 
     const type = val.trim().toLowerCase();
@@ -1404,14 +1432,14 @@ export function getJsonParserWebviewContent(): string {
     const lineMatch = errorMessage.match(/line (\\d+)/);
     const columnMatch = errorMessage.match(/column (\\d+)/);
     const locationText = (lineMatch && columnMatch)
-      ? '行 ' + lineMatch[1] + ', 列 ' + columnMatch[1]
+      ? i18n.line + ' ' + lineMatch[1] + ', ' + i18n.column + ' ' + columnMatch[1]
       : '';
 
     // 文本窗左下角小灯泡（hover 显示错误详情）
     errorPopup.innerHTML = '';
     const popTitle = document.createElement('div');
     popTitle.className = 'error-popup-title';
-    popTitle.textContent = 'JSON 解析失败' + (locationText ? ' · ' + locationText : '');
+    popTitle.textContent = i18n.parseFailed + (locationText ? ' · ' + locationText : '');
     errorPopup.appendChild(popTitle);
     const popMsg = document.createElement('div');
     popMsg.textContent = errorMessage;
@@ -1423,13 +1451,13 @@ export function getJsonParserWebviewContent(): string {
     errorDiv.className = 'error-container';
     const title = document.createElement('div');
     title.className = 'error-title';
-    title.textContent = 'JSON 解析失败';
+    title.textContent = i18n.parseFailed;
     errorDiv.appendChild(title);
     const message = document.createElement('div');
     message.className = 'error-message';
     if (lineMatch && columnMatch) {
-      message.innerHTML = '<strong>位置:</strong> 行 ' + lineMatch[1] + ', 列 ' + columnMatch[1] + '<br><br>';
-      message.innerHTML += '<strong>错误:</strong> ' + escapeHtml(errorMessage);
+      message.innerHTML = '<strong>' + i18n.location + ':</strong> ' + i18n.line + ' ' + lineMatch[1] + ', ' + i18n.column + ' ' + columnMatch[1] + '<br><br>';
+      message.innerHTML += '<strong>' + i18n.error + ':</strong> ' + escapeHtml(errorMessage);
     } else {
       message.textContent = errorMessage;
     }
