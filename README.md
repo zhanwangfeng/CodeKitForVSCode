@@ -10,7 +10,7 @@ CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通�
 - **树形工具列表**：主侧边栏 "Tools" 视图集中展示全部工具，点击即用
 - **WebView 展示**：工具可在编辑器主区域打开 WebView 标签页，支持炫酷的动画与交互
 - **易于扩展**：新增工具只需实现 `Tool` 接口并在注册表中登记，即可出现在列表
-- **零运行时依赖**：WebView 页面基于原生 HTML/CSS/JS，无外部依赖
+- **轻量依赖**：WebView 页面基于原生 HTML/CSS/JS，仅内联 Prism.js（~8KB）用于 JSON 语法高亮
 
 ## 内置工具
 
@@ -91,6 +91,7 @@ npm run package
 - **0.0.1**：活动栏图标入口 + Tree View 工具列表 + Hello World 动画工具
 - **0.0.2**：JSON Parser 工具（实时解析、可编辑树状图、展开/单行/示例按钮、自动换行）
 - **0.0.3**：JSON 编辑器优化（重叠双窗口切换、共用工具栏、行号显示、错误指示灯泡、展开/收起双模式）
+- **0.0.4**：JSON 语法高亮（Prism.js 文本窗高亮 + 编辑窗类型着色，与 VSCode 内置 JSON 高亮一致）
 
 ## License
 

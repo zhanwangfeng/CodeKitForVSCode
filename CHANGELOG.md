@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.0.4] - 2026-07-31
+
+### Added
+
+- **JSON 语法高亮**：
+  - 文本窗：基于 Prism.js 的实时语法高亮，覆盖属性名/字符串/数字/布尔值/null/标点符号
+  - 编辑窗：树形值按类型着色（修复 CSS 变量缺失 fallback 导致颜色不显示的问题）
+  - 高亮颜色使用 VSCode 主题变量 + fallback，与 VSCode 内置 JSON 高亮规则一致
+  - Prism.js 核心库 + JSON 语言定义内联到 WebView（共约 8KB，无外部依赖）
+
+### Fixed
+
+- 编辑窗 `.tree-value.*` CSS 缺少 fallback 颜色，导致 `--vscode-json-*` 变量在 WebView 中不存在时值显示为白色
+
 ## [0.0.3] - 2026-07-31
 
 ### Changed

@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "repository": {
@@ -65,12 +65,14 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package --out release"
+    "package": "vsce package --out release/"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "@types/prismjs": "^1.26.6",
     "@types/vscode": "^1.80.0",
     "@vscode/vsce": "^2.24.0",
+    "prismjs": "^1.30.0",
     "typescript": "^5.4.0"
   }
 }
