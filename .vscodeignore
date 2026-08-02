@@ -6,3 +6,5 @@ release/**
 **/*.map
 **/*.ts
 node_modules/.cache/**
+icons/icon-256.png
+icons/icon-512.png
