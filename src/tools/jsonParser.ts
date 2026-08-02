@@ -1,6 +1,7 @@
+/** JSON Parser 工具：打开实时解析 JSON 的 WebView（双窗口、可编辑树、Prism 高亮）。 */
 import * as vscode from 'vscode';
-import { t } from '../i18n';
-import { getJsonParserWebviewContent } from '../webviews/jsonParserWebview';
+import { getLocale, t } from '../i18n';
+import { getJsonParserI18n, getJsonParserUI, getJsonParserWebviewContent } from '../webviews/jsonParserWebview';
 import { Tool } from './tool';
 
 export const jsonParserTool: Tool = {
@@ -16,10 +17,19 @@ export const jsonParserTool: Tool = {
   run() {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.jsonParser',
-      'JSON Parser',
+      t('tool.jsonParser.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
     panel.webview.html = getJsonParserWebviewContent();
+    return panel;
+  },
+  onLocaleChange(panel) {
+    panel.webview.postMessage({
+      type: 'localeChanged',
+      locale: getLocale(),
+      ui: getJsonParserUI(),
+      i18n: getJsonParserI18n(),
+    });
   },
 };

@@ -19,6 +19,13 @@ CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通�
 | --- | --- |
 | Hello World | 打开一个带动画效果的 WebView 标签页，作为首个示例工具 |
 | JSON Parser | 实时解析 JSON 字符串，双窗口切换展示可编辑的树状结构，支持行号显示 |
+| Unix 时间 | Unix 时间戳与人类可读日期互转（秒/毫秒自动识别） |
+| Base64 | Base64 编码/解码（UTF-8 安全） |
+| Unicode | 文本与 `\uXXXX` 转义互转 |
+| UUID | 批量生成 RFC 4122 v4 UUID（大小写） |
+| MD5 | 计算输入文本的 MD5 哈希 |
+| URL 编码 | URL 组件编码/解码 |
+| 变量名转换 | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE 互转 |
 
 ## 项目结构
 
@@ -32,14 +39,22 @@ CodeKitForVSCode/
 │   │   ├── tool.ts             # Tool 接口定义
 │   │   ├── helloWorld.ts       # Hello World 工具
 │   │   ├── jsonParser.ts       # JSON Parser 工具
+│   │   ├── converters/         # 7 个转换工具（共享 Converter 框架）
+│   │   │   ├── types.ts        # ConverterSpec 接口
+│   │   │   ├── converterTool.ts# spec → Tool 工厂
+│   │   │   ├── unixTime.ts base64.ts unicode.ts uuid.ts md5.ts urlEncode.ts varName.ts
+│   │   │   └── index.ts        # 转换工具注册表
 │   │   └── index.ts            # 工具注册表
 │   ├── i18n/
 │   │   └── index.ts            # 内部 i18n 模块（双语字典 + 语言状态 + 持久化）
 │   └── webviews/
 │       ├── helloWorldWebview.ts # WebView 页面内容（含语言选择器）
-│       └── jsonParserWebview.ts # JSON 解析 WebView 页面
+│       ├── jsonParserWebview.ts # JSON 解析 WebView 页面
+│       └── converterWebview.ts  # 转换工具通用 WebView 构建器
 ├── resources/
-│   └── icon.svg                # 活动栏自定义图标
+│   ├── icon.svg                # 活动栏自定义图标
+│   ├── prism/                  # JSON 语法高亮（Prism.js）
+│   └── md5/md5.min.js          # MD5 算法（blueimp-md5，转换工具内联）
 └── docs/
     └── ai-workflow.md          # 开发流程规范
 ```
@@ -96,6 +111,7 @@ npm run package
 - **0.0.3**：JSON 编辑器优化（重叠双窗口切换、共用工具栏、行号显示、错误指示灯泡、展开/收起双模式）
 - **0.0.4**：JSON 语法高亮（Prism.js 文本窗高亮 + 编辑窗类型着色，与 VSCode 内置 JSON 高亮一致）
 - **0.0.5**：多语言支持（英文 / 简体中文，Hello World 内切换，插件内部自管理）
+- **0.0.6**：新增 7 个转换工具（Unix 时间 / Base64 / Unicode / UUID / MD5 / URL 编码 / 变量名转换）+ Converter 通用框架
 
 ## License
 

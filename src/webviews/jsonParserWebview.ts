@@ -1,19 +1,30 @@
+/** JSON Parser WebView 内容生成：双窗口、Prism 语法高亮、可编辑树、错误定位。 */
 import * as fs from 'fs';
 import * as path from 'path';
 import { getLocale, t } from '../i18n';
 
-export function getJsonParserWebviewContent(): string {
-  const prismCore = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-core.min.js'),
-    'utf8'
-  );
-  const prismJson = fs.readFileSync(
-    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-json.min.js'),
-    'utf8'
-  );
+/** JSON Parser WebView 静态文案（标签/按钮/占位符等，语言切换时原地更新） */
+export function getJsonParserUI() {
+  return {
+    title: t('tool.jsonParser.name'),
+    tabText: t('json.tabText'),
+    tabTree: t('json.tabTree'),
+    wrap: t('json.wrap'),
+    lineNumbers: t('json.lineNumbers'),
+    expand: t('json.expand'),
+    minify: t('json.minify'),
+    example: t('json.example'),
+    clear: t('json.clear'),
+    copy: t('json.copy'),
+    placeholder: t('json.placeholder'),
+    waiting: t('json.waiting'),
+    synced: t('json.synced'),
+  };
+}
 
-  // <script> 内动态文案：按当前语言解析后注入
-  const i18n = {
+/** JSON Parser WebView 脚本内动态文案（错误提示、树操作菜单等，语言切换时原地更新） */
+export function getJsonParserI18n() {
+  return {
     waiting: t('json.waiting'),
     synced: t('json.synced'),
     noData: t('json.noData'),
@@ -33,6 +44,21 @@ export function getJsonParserWebviewContent(): string {
     addProperty: t('json.addProperty'),
     addElement: t('json.addElement'),
   };
+}
+
+export function getJsonParserWebviewContent(): string {
+  const prismCore = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-core.min.js'),
+    'utf8'
+  );
+  const prismJson = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-json.min.js'),
+    'utf8'
+  );
+
+  const ui = getJsonParserUI();
+  const i18n = getJsonParserI18n();
+  const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
   const i18nSource = JSON.stringify(i18n).replace(/</g, '\\u003c');
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
 
@@ -555,23 +581,23 @@ export function getJsonParserWebviewContent(): string {
 <div class="container">
   <div class="toolbar">
     <div class="window-tabs">
-      <button class="tab active" id="tabText">${t('json.tabText')}</button>
-      <button class="tab" id="tabTree">${t('json.tabTree')}</button>
+      <button class="tab active" id="tabText" data-i18n="tabText">${t('json.tabText')}</button>
+      <button class="tab" id="tabTree" data-i18n="tabTree">${t('json.tabTree')}</button>
     </div>
     <div class="toolbar-actions">
       <label class="checkbox-wrapper">
         <input type="checkbox" id="wrapCheckbox" checked>
-        <span class="checkbox-label">${t('json.wrap')}</span>
+        <span class="checkbox-label" data-i18n="wrap">${t('json.wrap')}</span>
       </label>
       <label class="checkbox-wrapper">
         <input type="checkbox" id="lineNumbersCheckbox">
-        <span class="checkbox-label">${t('json.lineNumbers')}</span>
+        <span class="checkbox-label" data-i18n="lineNumbers">${t('json.lineNumbers')}</span>
       </label>
-      <button class="btn btn-ghost" id="expandBtn">${t('json.expand')}</button>
-      <button class="btn btn-ghost" id="minifyBtn">${t('json.minify')}</button>
-      <button class="btn btn-ghost" id="exampleBtn">${t('json.example')}</button>
-      <button class="btn btn-ghost" id="clearBtn">${t('json.clear')}</button>
-      <button class="btn btn-ghost" id="copyBtn">${t('json.copy')}</button>
+      <button class="btn btn-ghost" id="expandBtn" data-i18n="expand">${t('json.expand')}</button>
+      <button class="btn btn-ghost" id="minifyBtn" data-i18n="minify">${t('json.minify')}</button>
+      <button class="btn btn-ghost" id="exampleBtn" data-i18n="example">${t('json.example')}</button>
+      <button class="btn btn-ghost" id="clearBtn" data-i18n="clear">${t('json.clear')}</button>
+      <button class="btn btn-ghost" id="copyBtn" data-i18n="copy">${t('json.copy')}</button>
     </div>
   </div>
 
@@ -581,7 +607,7 @@ export function getJsonParserWebviewContent(): string {
         <div class="line-numbers" id="lineNumbers"></div>
         <div class="text-area-wrapper">
           <pre class="highlight-layer" id="highlightLayer" aria-hidden="true"></pre>
-          <textarea id="jsonInput" placeholder="${t('json.placeholder')}" class="wrap-enabled"></textarea>
+          <textarea id="jsonInput" placeholder="${t('json.placeholder')}" data-i18n-ph="placeholder" class="wrap-enabled"></textarea>
         </div>
       </div>
       <div class="error-indicator" id="errorIndicator">
@@ -593,13 +619,13 @@ export function getJsonParserWebviewContent(): string {
     </div>
     <div class="window-pane" id="paneTree">
       <div id="resultContainer" class="tree-container wrap-enabled">
-        <div class="placeholder">${t('json.waiting')}</div>
+        <div class="placeholder" data-i18n="waiting">${t('json.waiting')}</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="sync-indicator" id="syncIndicator">${t('json.synced')}</div>
+<div class="sync-indicator" id="syncIndicator" data-i18n="synced">${t('json.synced')}</div>
 
 <script>
   // Prism.js core + JSON language definition (inlined)
@@ -608,6 +634,17 @@ export function getJsonParserWebviewContent(): string {
 
   // 本地化文案（按打开时的语言解析注入）
   const i18n = ${i18nSource};
+
+  // 语言切换时按 data-i18n* 属性批量更新 DOM 文案（i18n 对象同步刷新，供后续交互使用）
+  window.addEventListener('message', function(e) {
+    var d = e.data;
+    if (!d || d.type !== 'localeChanged') return;
+    if (d.i18n && typeof i18n !== 'undefined') Object.assign(i18n, d.i18n);
+    if (d.locale) document.documentElement.lang = d.locale === 'zh-cn' ? 'zh-CN' : 'en';
+    function val(k) { if (d.ui && d.ui[k] !== undefined) return d.ui[k]; if (d.i18n && d.i18n[k] !== undefined) return d.i18n[k]; return null; }
+    document.querySelectorAll('[data-i18n]').forEach(function(el) { var v = val(el.getAttribute('data-i18n')); if (v !== null) el.textContent = v; });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el) { var v = val(el.getAttribute('data-i18n-ph')); if (v !== null) el.setAttribute('placeholder', v); });
+  });
 
   const input = document.getElementById('jsonInput');
   const resultContainer = document.getElementById('resultContainer');

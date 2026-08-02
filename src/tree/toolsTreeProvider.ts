@@ -1,3 +1,4 @@
+/** Tools 视图的 TreeDataProvider：把 tools 数组渲染为侧边栏树形列表，点击触发工具命令。 */
 import * as vscode from 'vscode';
 import { Tool } from '../tools';
 

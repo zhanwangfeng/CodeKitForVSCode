@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "repository": {
@@ -49,6 +49,12 @@
         "title": "Refresh Tools",
         "category": "CodeKit",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "codeKit.openNewWindow",
+        "title": "Open New Window",
+        "category": "CodeKit",
+        "icon": "$(add)"
       }
     ],
     "menus": {
@@ -56,6 +62,13 @@
         {
           "command": "codeKit.refreshTools",
           "when": "view == codeKit.views.tools",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "codeKit.openNewWindow",
+          "when": "view == codeKit.views.tools && viewItem == tool",
           "group": "navigation"
         }
       ]

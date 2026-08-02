@@ -1,5 +1,33 @@
 # Change Log
 
+## [0.0.6] - 2026-08-02
+
+### Added
+
+- **7 个格式化/转换工具**：与 Hello World、JSON Parser 并列，共 9 个工具
+  - **Unix 时间**：Unix 时间戳与日期互转（秒/毫秒自动识别，全球时区下拉，默认填充当前时间）
+  - **Base64**：Base64 编码/解码（左右布局双向编辑，UTF-8 安全，解码失败小灯泡提示）
+  - **Unicode**：文本与 `\uXXXX` 转义互转（左转义右明文）
+  - **UUID**：批量生成 RFC 4122 v4 UUID（大小写，逐行复制）
+  - **MD5**：计算输入文本的 MD5 哈希（内联 blueimp-md5，UTF-8 安全）
+  - **URL 编码**：URL 组件编码/解码
+  - **变量名转换**：camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE 互转
+- **Converter 通用框架**：所有转换工具共享一套 WebView 模板（操作按钮 + 输入 + 只读输出 + 实时转换）
+  - 转换逻辑以纯函数定义在 TS 侧，通过 `convert.toString()` 内联进 WebView，保留正则字面量与转义
+  - 外部算法（MD5）以资源文件在构建期内联为 `<script>`，在转换函数之前提供全局
+  - 新增同类工具只需写一个 spec 文件 + 加 i18n 键，零框架改动
+- **WebView 面板复用**：点击工具复用已打开的面板（跳转到第一个实例），右键菜单"打开新窗口"可强制新建
+  - `panelRegistry: Map<string, Set<WebviewPanel>>` 管理各工具的已打开面板，面板关闭时自动移除
+- **语言切换实时响应**：Hello World 切换语言后，所有已打开 WebView 原地更新全部文案（不重建页面）
+  - `Tool.onLocaleChange` 接口：扩展通过 `postMessage` 通知 WebView 更新标题/按钮/占位符/动态内容
+  - 各 WebView 按 `data-i18n*` 属性批量刷新 DOM，Unix Time 重建时区列表，UUID 重新渲染列表
+
+### Changed
+
+- `src/i18n` 新增 7 个工具的双语文案与 Converter 通用 UI 文案
+- `tools` 注册表扩展为 9 个工具
+- Tree View 工具项支持右键上下文菜单（`viewItem == tool` 时显示"打开新窗口"）
+
 ## [0.0.5] - 2026-08-01
 
 ### Added
