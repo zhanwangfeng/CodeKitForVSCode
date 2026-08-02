@@ -7,7 +7,7 @@ export interface Tool {
   readonly description: string;
   readonly commandId: string;
   readonly icon?: vscode.ThemeIcon;
-  run(context: vscode.ExtensionContext): vscode.WebviewPanel;
+  run(context: vscode.ExtensionContext, initialText?: string): vscode.WebviewPanel;
   /** 语言切换时通知已打开的 WebView 原地更新文案（postMessage）；未实现则仅更新面板标签标题 */
   onLocaleChange?(panel: vscode.WebviewPanel): void;
 }

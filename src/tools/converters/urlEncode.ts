@@ -27,16 +27,16 @@ export const urlEncodeTool: Tool = {
   get description() {
     return t('tool.urlEncode.description');
   },
-  commandId: 'codeKit.urlEncode',
+  commandId: 'codeKit.urlEncoder',
   icon: new vscode.ThemeIcon('link'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.urlEncode',
       t('tool.urlEncode.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getDualPaneWebviewContent(getConfig());
+    panel.webview.html = getDualPaneWebviewContent(getConfig(), initialText);
     return panel;
   },
   onLocaleChange(panel) {

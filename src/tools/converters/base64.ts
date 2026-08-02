@@ -14,14 +14,14 @@ export const base64Tool: Tool = {
   },
   commandId: 'codeKit.base64',
   icon: new vscode.ThemeIcon('replace'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.base64',
       t('tool.base64.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getBase64WebviewContent();
+    panel.webview.html = getBase64WebviewContent(initialText);
     return panel;
   },
   onLocaleChange(panel) {

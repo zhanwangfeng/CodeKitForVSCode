@@ -14,7 +14,7 @@ export const uuidTool: Tool = {
   },
   commandId: 'codeKit.uuid',
   icon: new vscode.ThemeIcon('key'),
-  run() {
+  run(context: vscode.ExtensionContext, _initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.uuid',
       t('tool.uuid.name'),

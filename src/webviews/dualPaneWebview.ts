@@ -44,12 +44,13 @@ export function getDualPaneUI(config: DualPaneConfig) {
   };
 }
 
-export function getDualPaneWebviewContent(config: DualPaneConfig): string {
+export function getDualPaneWebviewContent(config: DualPaneConfig, initialText?: string): string {
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
   const p = config.keyPrefix;
 
   const ui = getDualPaneUI(config);
   const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
+  const initialTextSource = initialText ? JSON.stringify(initialText).replace(/</g, '\\u003c') : 'null';
 
   return `<!DOCTYPE html>
 <html lang="${langAttr}">
@@ -480,6 +481,31 @@ export function getDualPaneWebviewContent(config: DualPaneConfig): string {
   }
   bindCopy('copyLeft', left);
   bindCopy('copyRight', right);
+
+  // 接收扩展发来的文本，填充到明文窗并触发同步（由 Open xxx 命令发送）
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'setInput') {
+      if (reversed) {
+        right.value = e.data.text;
+        right.dispatchEvent(new Event('input'));
+      } else {
+        left.value = e.data.text;
+        left.dispatchEvent(new Event('input'));
+      }
+    }
+  });
+
+  // 初始文本（由 Open xxx 命令通过 run(context, initialText) 传入）
+  var initialText = ${initialTextSource};
+  if (initialText) {
+    if (reversed) {
+      right.value = initialText;
+      right.dispatchEvent(new Event('input'));
+    } else {
+      left.value = initialText;
+      left.dispatchEvent(new Event('input'));
+    }
+  }
 </script>
 </body>
 </html>`;

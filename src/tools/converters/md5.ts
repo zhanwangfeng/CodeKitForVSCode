@@ -14,14 +14,14 @@ export const md5Tool: Tool = {
   },
   commandId: 'codeKit.md5',
   icon: new vscode.ThemeIcon('lock'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.md5',
       t('tool.md5.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getMd5WebviewContent();
+    panel.webview.html = getMd5WebviewContent(initialText);
     return panel;
   },
   onLocaleChange(panel) {

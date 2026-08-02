@@ -44,6 +44,7 @@ const messages: Record<string, Record<Locale, string>> = {
   'hello.lang.label': { en: 'Language', 'zh-cn': '语言' },
   'hello.lang.en': { en: 'English', 'zh-cn': 'English' },
   'hello.lang.zh': { en: '简体中文', 'zh-cn': '简体中文' },
+  'hello.contextMenu': { en: 'Context Menu', 'zh-cn': '右键菜单' },
 
   // —— 通用文案（多工具共用）——
   'common.wrap': { en: 'Wrap', 'zh-cn': '自动换行' },
@@ -190,6 +191,10 @@ const messages: Record<string, Record<Locale, string>> = {
   'varName.kebab': { en: 'kebab-case', 'zh-cn': 'kebab-case' },
   'varName.pascal': { en: 'PascalCase', 'zh-cn': 'PascalCase' },
   'varName.constant': { en: 'CONSTANT_CASE', 'zh-cn': 'CONSTANT_CASE' },
+
+  // —— 编辑器右键命令 ——
+  'jsonFormat.error.parse': { en: 'JSON parse failed', 'zh-cn': 'JSON 解析失败' },
+  'convert.error.decode': { en: 'Decode failed', 'zh-cn': '解码失败' },
 };
 
 const STATE_KEY = 'codeKit.locale';

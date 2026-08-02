@@ -14,7 +14,7 @@ export const unixTimeTool: Tool = {
   },
   commandId: 'codeKit.unixTime',
   icon: new vscode.ThemeIcon('clock'),
-  run() {
+  run(context: vscode.ExtensionContext, _initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.unixTime',
       t('tool.unixTime.name'),

@@ -1,117 +1,109 @@
 # CodeKit
 
-> 一个 VSCode 扩展工具箱：把常用的开发小工具收进侧边栏，随时取用。
+[![VS Marketplace](https://vsmarketplacebadges.dev/version-short/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
+[![Installs](https://vsmarketplacebadges.dev/installs/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
 
-CodeKit 是一款基于 VSCode Extension API 打造的工具集扩展。它通过 **Activity Bar（活动栏）的自定义图标入口** 进入主侧边栏的 **Tree View 树形列表**，将各种开发场景中反复出现的小需求沉淀为一个个可即点即用的工具。
+**English** | [中文](README.zh-CN.md)
 
-## 特性
+A VSCode extension toolbox: collect common dev utilities into the sidebar, always within reach.
 
-- **自定义活动栏入口**：Activity Bar 专属 CodeKit 图标，一键进入工具面板
-- **树形工具列表**：主侧边栏 "Tools" 视图集中展示全部工具，点击即用
-- **WebView 展示**：工具可在编辑器主区域打开 WebView 标签页，支持炫酷的动画与交互
-- **易于扩展**：新增工具只需实现 `Tool` 接口并在注册表中登记，即可出现在列表
-- **轻量依赖**：WebView 页面基于原生 HTML/CSS/JS，仅内联 Prism.js（~8KB）用于 JSON 语法高亮
-- **多语言**：插件内部自管理英文 / 简体中文双语，在 Hello World 工具内切换，JSON Parser 等随语言显示
+- GitHub: https://github.com/zhanwangfeng/CodeKitForVSCode
+- VSCode: https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode
 
-## 内置工具
+## Quick Start
 
-| 工具 | 说明 |
-| --- | --- |
-| Hello World | 打开一个带动画效果的 WebView 标签页，作为首个示例工具 |
-| JSON Parser | 实时解析 JSON 字符串，双窗口切换展示可编辑的树状结构，支持行号显示 |
-| Unix 时间 | Unix 时间戳与人类可读日期互转（秒/毫秒自动识别） |
-| Base64 | Base64 编码/解码（UTF-8 安全） |
-| Unicode | 文本与 `\uXXXX` 转义互转 |
-| UUID | 批量生成 RFC 4122 v4 UUID（大小写） |
-| MD5 | 计算输入文本的 MD5 哈希 |
-| URL 编码 | URL 组件编码/解码 |
-| 变量名转换 | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE 互转 |
+1. Click the CodeKit icon in the Activity Bar to open the Tools list
+2. Click any tool (e.g. JSON Parser) to open a WebView tab in the editor area
+3. Select text in the editor, right-click to open the **CodeKit** menu, and run encode/decode/format operations in place
 
-## 项目结构
+## Built-in Tools
 
-```
-CodeKitForVSCode/
-├── src/
-│   ├── extension.ts            # 扩展入口：注册命令与 Tree View
-│   ├── tree/
-│   │   └── toolsTreeProvider.ts # 树形列表数据提供者
-│   ├── tools/
-│   │   ├── tool.ts             # Tool 接口定义
-│   │   ├── helloWorld.ts       # Hello World 工具
-│   │   ├── jsonParser.ts       # JSON Parser 工具
-│   │   ├── converters/         # 7 个转换工具（共享 Converter 框架）
-│   │   │   ├── types.ts        # ConverterSpec 接口
-│   │   │   ├── converterTool.ts# spec → Tool 工厂
-│   │   │   ├── unixTime.ts base64.ts unicode.ts uuid.ts md5.ts urlEncode.ts varName.ts
-│   │   │   └── index.ts        # 转换工具注册表
-│   │   └── index.ts            # 工具注册表
-│   ├── i18n/
-│   │   └── index.ts            # 内部 i18n 模块（双语字典 + 语言状态 + 持久化）
-│   └── webviews/
-│       ├── helloWorldWebview.ts # WebView 页面内容（含语言选择器）
-│       ├── jsonParserWebview.ts # JSON 解析 WebView 页面
-│       └── converterWebview.ts  # 转换工具通用 WebView 构建器
-├── resources/
-│   ├── icon.svg                # 活动栏自定义图标
-│   ├── prism/                  # JSON 语法高亮（Prism.js）
-│   └── md5/md5.min.js          # MD5 算法（blueimp-md5，转换工具内联）
-└── docs/
-    └── ai-workflow.md          # 开发流程规范
-```
+| Tool | Description |
+|------|-------------|
+| Hello World | Animated demo tool with language switcher and context menu toggle |
+| JSON Parser | Real-time JSON parsing, dual-window toggle, editable tree, line numbers, Prism syntax highlighting |
+| Unix Time | Unix timestamp ↔ human-readable date (auto-detect seconds/milliseconds, global timezones) |
+| Base64 | Base64 encode/decode (UTF-8 safe, dual-pane editing) |
+| Unicode | Text ↔ `\uXXXX` escape conversion |
+| UUID | Batch generate RFC 4122 v4 UUIDs (upper/lower case, per-line copy) |
+| MD5 | Compute MD5 hash of input text |
+| URL Encode | URL component encode/decode |
+| Variable Name | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE conversion |
 
-## 开发
+## Editor Context Menu
 
-```bash
-npm install
-npm run compile
-```
+Right-click in the editor to run operations on selected text, replacing it in place:
 
-按 `F5` 打开 "Run Extension" 调试窗口进行测试。
+| Category | Always Available | Requires Selection |
+|----------|------------------|--------------------|
+| Json | Open JSON Parser | JSON Expand / JSON Collapse |
+| Base64 | Open Base64 | Base64 Encode / Base64 Decode |
+| URL | Open URL Encoder | URL Encode / URL Decode |
+| Unicode | Open Unicode | Unicode Escape / Unicode Unescape |
+| Unix Time | Open Unix Time / Insert Current Time | — |
+| MD5 | Open MD5 | MD5 Hash |
+| UUID | Open UUID / Insert UUID | — |
+| Variable Name | Open Variable Name | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE |
 
-### 新增一个工具
+- **Open xxx**: Opens WebView and fills the input pane with selected text
+- **In-place replace**: Takes selected text → transforms → replaces selection; shows error on failure
+- **Insert Current Time / Insert UUID**: Replaces selection if any, otherwise inserts at cursor
+- **Disabled state**: Commands requiring selection appear grayed out with "(requires selection)" suffix when no text is selected
+- **Toggle**: Checkbox in Hello World WebView (top-left), enabled by default, persisted via VS Code configuration
 
-1. 在 `src/tools/` 下新建文件，实现 `Tool` 接口：
+## Features
 
-```ts
-import * as vscode from 'vscode';
-import { Tool } from './tool';
+- **Activity Bar entry**: Dedicated CodeKit icon for one-click access to the tool panel
+- **WebView panels**: Tools open as tabs in the editor area with animations and interactions
+- **Panel reuse**: Clicking a tool reuses an open panel; right-click "Open New Window" forces a new instance
+- **i18n**: English / Simplified Chinese, switchable in Hello World, all open panels update in real time
+- **Editor context menu**: In-place text transformation on selected text, toggleable from Hello World
+- **Lightweight**: Native HTML/CSS/JS, only inlines Prism.js (~8KB) for JSON syntax highlighting
 
-export const myTool: Tool = {
-  id: 'my-tool',
-  name: 'My Tool',
-  description: '工具描述',
-  commandId: 'codeKit.myTool',
-  icon: new vscode.ThemeIcon('zap'),
-  run() {
-    vscode.window.showInformationMessage('Hello from My Tool!');
-  },
-};
-```
+## Usage
 
-2. 在 `src/tools/index.ts` 的 `tools` 数组中登记：
+### Sidebar Tools
 
-```ts
-export const tools: readonly Tool[] = [helloWorldTool, myTool];
-```
+1. Click the CodeKit icon in the Activity Bar
+2. Click a tool in the Tools list to open it as a WebView tab
+3. Use the tool's input/output panes — all transformations update in real time
+4. Click the same tool again to jump to the existing panel; right-click → "Open New Window" to force a new instance
 
-3. 重新编译并点击刷新按钮（或重载窗口）即可看到新工具。
+### Editor Context Menu
 
-## 打包
+1. Select text in the editor
+2. Right-click → **CodeKit** → choose a category (Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name)
+3. Pick an action:
+   - **Open xxx** — Opens the tool's WebView and fills the input pane with selected text
+   - **Encode/Decode/Format** — Replaces the selected text with the transformed result in place
+   - **Insert Current Time / Insert UUID** — Replaces selection if any, otherwise inserts at cursor
 
-```bash
-npm run package
-```
+### Language Switching
 
-产物为 `release/code-kit-for-vscode-<version>.vsix`，可安装到任意 VSCode。
+- Open Hello World, click **English** or **简体中文** in the top-right corner
+- All open WebView panels update their text in real time without reloading
 
-## 版本
+### Context Menu Toggle
 
-- **0.0.1**：活动栏图标入口 + Tree View 工具列表 + Hello World 动画工具
-- **0.0.2**：JSON Parser 工具（实时解析、可编辑树状图、展开/单行/示例按钮、自动换行）
-- **0.0.3**：JSON 编辑器优化（重叠双窗口切换、共用工具栏、行号显示、错误指示灯泡、展开/收起双模式）
-- **0.0.4**：JSON 语法高亮（Prism.js 文本窗高亮 + 编辑窗类型着色，与 VSCode 内置 JSON 高亮一致）
-- **0.0.5**：多语言支持（英文 / 简体中文，Hello World 内切换，插件内部自管理）
-- **0.0.6**：新增 7 个转换工具（Unix 时间 / Base64 / Unicode / UUID / MD5 / URL 编码 / 变量名转换）+ Converter 通用框架
+- Open Hello World, use the **Context Menu** checkbox in the top-left corner
+- Uncheck to hide the CodeKit entry from the editor right-click menu
+- Setting persists across sessions via VS Code configuration
+
+## Install
+
+Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode).
+
+Or search "CodeKit" in the VS Code Extensions panel (`Ctrl+Shift+X`).
+
+## Versions
+
+- **0.0.1**: Activity Bar icon + Tree View tool list + Hello World animation
+- **0.0.2**: JSON Parser (real-time parsing, editable tree, expand/collapse/sample buttons, word wrap)
+- **0.0.3**: JSON editor overhaul (overlapping dual-window toggle, shared toolbar, line numbers, error indicator)
+- **0.0.4**: JSON syntax highlighting (Prism.js text pane + tree type coloring)
+- **0.0.5**: i18n support (English / Simplified Chinese, switch in Hello World)
+- **0.0.6**: 7 converter tools + Converter framework + panel reuse + real-time language switching
+- **0.0.7**: Editor context menu (9 categories, 24 commands, in-place text replacement) + HelloWorld toggle
 
 ## License
 

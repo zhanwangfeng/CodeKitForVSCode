@@ -14,14 +14,14 @@ export const jsonParserTool: Tool = {
   },
   commandId: 'codeKit.jsonParser',
   icon: new vscode.ThemeIcon('json'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.jsonParser',
       t('tool.jsonParser.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getJsonParserWebviewContent();
+    panel.webview.html = getJsonParserWebviewContent(initialText);
     return panel;
   },
   onLocaleChange(panel) {

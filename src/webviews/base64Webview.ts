@@ -19,11 +19,12 @@ export function getBase64UI() {
   };
 }
 
-export function getBase64WebviewContent(): string {
+export function getBase64WebviewContent(initialText?: string): string {
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
 
   const ui = getBase64UI();
   const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
+  const initialTextSource = initialText ? JSON.stringify(initialText).replace(/</g, '\\u003c') : 'null';
 
   return `<!DOCTYPE html>
 <html lang="${langAttr}">
@@ -444,6 +445,21 @@ export function getBase64WebviewContent(): string {
   }
   bindCopy('copyLeft', left);
   bindCopy('copyRight', right);
+
+  // 接收扩展发来的文本，填充到明文窗并触发编码（由 Open Base64 命令发送）
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'setInput') {
+      left.value = e.data.text;
+      left.dispatchEvent(new Event('input'));
+    }
+  });
+
+  // 初始文本（由 Open Base64 命令通过 run(context, initialText) 传入）
+  var initialText = ${initialTextSource};
+  if (initialText) {
+    left.value = initialText;
+    left.dispatchEvent(new Event('input'));
+  }
 </script>
 </body>
 </html>`;

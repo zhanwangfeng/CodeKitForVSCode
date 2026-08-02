@@ -14,17 +14,17 @@ export const helloWorldTool: Tool = {
   },
   commandId: 'codeKit.helloWorld',
   icon: new vscode.ThemeIcon('smiley'),
-  run(context: vscode.ExtensionContext) {
+  run(context: vscode.ExtensionContext, _initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.helloWorld',
       t('tool.helloWorld.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getHelloWorldWebviewContent();
+    const contextMenuEnabled = vscode.workspace.getConfiguration('codeKit').get<boolean>('contextMenuEnabled', true);
+    panel.webview.html = getHelloWorldWebviewContent(contextMenuEnabled);
 
-    // Hello World 内的语言选择器通过 postMessage 通知扩展
-    // 必须存储 disposable，否则监听器可能被 GC 回收导致语言切换失效
+    // Hello World 内的语言选择器和右键菜单开关通过 postMessage 通知扩展
     context.subscriptions.push(
       panel.webview.onDidReceiveMessage((msg) => {
         if (msg && msg.type === 'setLocale' && (msg.locale === 'en' || msg.locale === 'zh-cn')) {
@@ -32,9 +32,10 @@ export const helloWorldTool: Tool = {
             return;
           }
           setLocale(msg.locale);
-          // 刷新 Tree View 工具名/描述，并通过 onLocaleChange 通知所有已打开面板（含自身）更新文案
           vscode.commands.executeCommand('codeKit.refreshTools');
           vscode.commands.executeCommand('codeKit.updatePanelTitles');
+        } else if (msg && msg.type === 'toggleContextMenu') {
+          vscode.commands.executeCommand('codeKit.toggleContextMenu', msg.enabled);
         }
       }),
     );

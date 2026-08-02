@@ -14,14 +14,14 @@ export const varNameTool: Tool = {
   },
   commandId: 'codeKit.varName',
   icon: new vscode.ThemeIcon('case-sensitive'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.varName',
       t('tool.varName.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getVarNameWebviewContent();
+    panel.webview.html = getVarNameWebviewContent(initialText);
     return panel;
   },
   onLocaleChange(panel) {

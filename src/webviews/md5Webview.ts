@@ -26,11 +26,12 @@ export function getMd5UI() {
   };
 }
 
-export function getMd5WebviewContent(): string {
+export function getMd5WebviewContent(initialText?: string): string {
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
 
   const ui = getMd5UI();
   const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
+  const initialTextSource = initialText ? JSON.stringify(initialText).replace(/</g, '\\u003c') : 'null';
 
   return `<!DOCTYPE html>
 <html lang="${langAttr}">
@@ -283,6 +284,21 @@ export function getMd5WebviewContent(): string {
       });
     }
   });
+
+  // 接收扩展发来的文本，填充到输入窗并触发计算（由 Open MD5 命令发送）
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'setInput') {
+      input.value = e.data.text;
+      input.dispatchEvent(new Event('input'));
+    }
+  });
+
+  // 初始文本（由 Open MD5 命令通过 run(context, initialText) 传入）
+  var initialText = ${initialTextSource};
+  if (initialText) {
+    input.value = initialText;
+    input.dispatchEvent(new Event('input'));
+  }
 </script>
 </body>
 </html>`;
