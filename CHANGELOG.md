@@ -1,5 +1,27 @@
 # Change Log
 
+## [0.0.6] - 2026-08-01
+
+### Added
+
+- **7 个格式化/转换工具**：与 Hello World、JSON Parser 并列，共 9 个工具
+  - **Unix 时间**：Unix 时间戳与日期互转（秒/毫秒自动识别，多格式输出）
+  - **Base64**：Base64 编码/解码（UTF-8 安全）
+  - **Unicode**：文本与 `\uXXXX` 转义互转
+  - **UUID**：批量生成 RFC 4122 v4 UUID（大小写）
+  - **MD5**：计算输入文本的 MD5 哈希（内联 blueimp-md5，UTF-8 安全）
+  - **URL 编码**：URL 组件编码/解码
+  - **变量名转换**：camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE 互转
+- **Converter 通用框架**：所有转换工具共享一套 WebView 模板（操作按钮 + 输入 + 只读输出 + 实时转换）
+  - 转换逻辑以纯函数定义在 TS 侧，通过 `convert.toString()` 内联进 WebView，保留正则字面量与转义
+  - 外部算法（MD5）以资源文件在构建期内联为 `<script>`，在转换函数之前提供全局
+  - 新增同类工具只需写一个 spec 文件 + 加 i18n 键，零框架改动
+
+### Changed
+
+- `src/i18n` 新增 7 个工具的双语文案与 Converter 通用 UI 文案
+- `tools` 注册表扩展为 9 个工具
+
 ## [0.0.5] - 2026-08-01
 
 ### Added

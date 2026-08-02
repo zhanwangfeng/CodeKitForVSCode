@@ -1,4 +1,21 @@
+/** Hello World WebView 内容生成：渐变动画 + 介绍卡片 + 右上角语言选择器。 */
 import { getLocale, t } from '../i18n';
+
+/** 语言切换时发给 WebView 的原地更新消息载荷（不重建页面） */
+export function getHelloWorldLocalePayload() {
+  return {
+    type: 'localeChanged' as const,
+    locale: getLocale(),
+    title: t('hello.title'),
+    intro: t('hello.intro'),
+    features: [
+      t('hello.feature.1'),
+      t('hello.feature.2'),
+      t('hello.feature.3'),
+      t('hello.feature.4'),
+    ],
+  };
+}
 
 export function getHelloWorldWebviewContent(): string {
   const locale = getLocale();
@@ -143,7 +160,30 @@ export function getHelloWorldWebviewContent(): string {
   </div>
   <script>
     const vscode = acquireVsCodeApi();
-    const currentLocale = ${JSON.stringify(locale)};
+    let currentLocale = ${JSON.stringify(locale)};
+
+    // 语言切换时接收新文案，原地更新（不重建页面）
+    window.addEventListener('message', function(e) {
+      var d = e.data;
+      if (d && d.type === 'localeChanged') {
+        currentLocale = d.locale;
+        document.getElementById('langEn').classList.toggle('active', d.locale === 'en');
+        document.getElementById('langZh').classList.toggle('active', d.locale === 'zh-cn');
+        var h2 = document.querySelector('.card h2');
+        var p = document.querySelector('.card p');
+        var ul = document.querySelector('.card ul');
+        if (h2) h2.textContent = d.title;
+        if (p) p.textContent = d.intro;
+        if (ul) {
+          ul.innerHTML = '';
+          d.features.forEach(function(text) {
+            var li = document.createElement('li');
+            li.textContent = text;
+            ul.appendChild(li);
+          });
+        }
+      }
+    });
 
     document.getElementById('langEn').addEventListener('click', () => {
       if (currentLocale !== 'en') vscode.postMessage({ type: 'setLocale', locale: 'en' });
