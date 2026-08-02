@@ -14,10 +14,11 @@ export function getHelloWorldLocalePayload() {
       t('hello.feature.3'),
       t('hello.feature.4'),
     ],
+    contextMenuLabel: t('hello.contextMenu'),
   };
 }
 
-export function getHelloWorldWebviewContent(): string {
+export function getHelloWorldWebviewContent(contextMenuEnabled: boolean): string {
   const locale = getLocale();
 
   return `<!DOCTYPE html>
@@ -65,6 +66,25 @@ export function getHelloWorldWebviewContent(): string {
     background: linear-gradient(135deg, #ff6ec4, #4adede);
     border-color: transparent;
     font-weight: 600;
+  }
+  .ctx-menu-toggle {
+    position: fixed;
+    top: 18px;
+    left: 22px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #c9d2ff;
+    cursor: pointer;
+    user-select: none;
+  }
+  .ctx-menu-toggle input {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    accent-color: #4adede;
   }
   .card {
     max-width: 720px;
@@ -143,6 +163,10 @@ export function getHelloWorldWebviewContent(): string {
 </style>
 </head>
 <body>
+  <label class="ctx-menu-toggle">
+    <input type="checkbox" id="ctxMenuCb"${contextMenuEnabled ? ' checked' : ''}>
+    <span id="ctxMenuLabel">${t('hello.contextMenu')}</span>
+  </label>
   <div class="lang-switch" role="group" aria-label="${t('hello.lang.label')}">
     <button class="lang-btn${locale === 'en' ? ' active' : ''}" id="langEn" type="button">${t('hello.lang.en')}</button>
     <button class="lang-btn${locale === 'zh-cn' ? ' active' : ''}" id="langZh" type="button">${t('hello.lang.zh')}</button>
@@ -182,6 +206,7 @@ export function getHelloWorldWebviewContent(): string {
             ul.appendChild(li);
           });
         }
+        if (d.contextMenuLabel) document.getElementById('ctxMenuLabel').textContent = d.contextMenuLabel;
       }
     });
 
@@ -190,6 +215,11 @@ export function getHelloWorldWebviewContent(): string {
     });
     document.getElementById('langZh').addEventListener('click', () => {
       if (currentLocale !== 'zh-cn') vscode.postMessage({ type: 'setLocale', locale: 'zh-cn' });
+    });
+
+    // 右键菜单开关：通知扩展持久化并更新 setContext
+    document.getElementById('ctxMenuCb').addEventListener('change', (e) => {
+      vscode.postMessage({ type: 'toggleContextMenu', enabled: e.target.checked });
     });
 
     const container = document.querySelector('.hello');

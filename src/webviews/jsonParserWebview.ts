@@ -46,7 +46,7 @@ export function getJsonParserI18n() {
   };
 }
 
-export function getJsonParserWebviewContent(): string {
+export function getJsonParserWebviewContent(initialText?: string): string {
   const prismCore = fs.readFileSync(
     path.join(__dirname, '..', '..', 'resources', 'prism', 'prism-core.min.js'),
     'utf8'
@@ -61,6 +61,7 @@ export function getJsonParserWebviewContent(): string {
   const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
   const i18nSource = JSON.stringify(i18n).replace(/</g, '\\u003c');
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
+  const initialTextSource = initialText ? JSON.stringify(initialText).replace(/</g, '\\u003c') : 'null';
 
   return `<!DOCTYPE html>
 <html lang="${langAttr}">
@@ -1511,6 +1512,27 @@ export function getJsonParserWebviewContent(): string {
 
   // 初始化高亮
   updateHighlight();
+
+  // 接收扩展发来的文本，填充到文本窗并触发解析（面板已打开时由 OpenJsonParser 命令发送）
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'setInput') {
+      input.value = e.data.text;
+      isUpdatingFromTree = false;
+      updateHighlight();
+      updateLineNumbers();
+      parseJSON();
+    }
+  });
+
+  // 初始文本（由 OpenJsonParser 命令通过 run(context, initialText) 传入）
+  var initialText = ${initialTextSource};
+  if (initialText) {
+    input.value = initialText;
+    isUpdatingFromTree = false;
+    updateHighlight();
+    updateLineNumbers();
+    parseJSON();
+  }
 </script>
 </body>
 </html>`;

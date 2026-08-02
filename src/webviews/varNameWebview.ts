@@ -13,7 +13,7 @@ export function getVarNameUI() {
   };
 }
 
-export function getVarNameWebviewContent(): string {
+export function getVarNameWebviewContent(initialText?: string): string {
   const langAttr = getLocale() === 'zh-cn' ? 'zh-CN' : 'en';
 
   const formats = [
@@ -26,6 +26,7 @@ export function getVarNameWebviewContent(): string {
 
   const ui = getVarNameUI();
   const uiSource = JSON.stringify(ui).replace(/</g, '\\u003c');
+  const initialTextSource = initialText ? JSON.stringify(initialText).replace(/</g, '\\u003c') : 'null';
 
   const formatRows = formats
     .map(
@@ -261,6 +262,21 @@ ${formatRows}
       }
     });
   });
+
+  // 接收扩展发来的文本，填充到输入窗并触发转换（由 Open Variable Name 命令发送）
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'setInput') {
+      input.value = e.data.text;
+      input.dispatchEvent(new Event('input'));
+    }
+  });
+
+  // 初始文本（由 Open Variable Name 命令通过 run(context, initialText) 传入）
+  var initialText = ${initialTextSource};
+  if (initialText) {
+    input.value = initialText;
+    input.dispatchEvent(new Event('input'));
+  }
 </script>
 </body>
 </html>`;

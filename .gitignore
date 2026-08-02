@@ -3,3 +3,4 @@ out/
 release/
 *.vsix
 .vscode-test/
+.DS_Store

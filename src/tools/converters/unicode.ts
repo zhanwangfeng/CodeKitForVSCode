@@ -45,14 +45,14 @@ export const unicodeTool: Tool = {
   },
   commandId: 'codeKit.unicode',
   icon: new vscode.ThemeIcon('symbol-string'),
-  run() {
+  run(context: vscode.ExtensionContext, initialText?: string) {
     const panel = vscode.window.createWebviewPanel(
       'codeKit.unicode',
       t('tool.unicode.name'),
       vscode.ViewColumn.Active,
       { enableScripts: true, retainContextWhenHidden: true },
     );
-    panel.webview.html = getDualPaneWebviewContent(getConfig());
+    panel.webview.html = getDualPaneWebviewContent(getConfig(), initialText);
     return panel;
   },
   onLocaleChange(panel) {

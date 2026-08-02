@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "repository": {
@@ -16,7 +16,20 @@
     "Other"
   ],
   "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
+    "configuration": {
+      "title": "CodeKit",
+      "properties": {
+        "codeKit.contextMenuEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the CodeKit editor context menu."
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {
@@ -52,9 +65,229 @@
         "title": "Open New Window",
         "category": "CodeKit",
         "icon": "$(add)"
+      },
+      {
+        "command": "codeKit.jsonExpand",
+        "title": "JSON Expand"
+      },
+      {
+        "command": "codeKit.jsonCollapse",
+        "title": "JSON Collapse"
+      },
+      {
+        "command": "codeKit.openJsonParser",
+        "title": "Open JSON Parser"
+      },
+      {
+        "command": "codeKit.openBase64",
+        "title": "Open Base64"
+      },
+      {
+        "command": "codeKit.base64Encode",
+        "title": "Base64 Encode"
+      },
+      {
+        "command": "codeKit.base64Decode",
+        "title": "Base64 Decode"
+      },
+      {
+        "command": "codeKit.openUrlEncode",
+        "title": "Open URL Encoder"
+      },
+      {
+        "command": "codeKit.urlEncode",
+        "title": "URL Encode"
+      },
+      {
+        "command": "codeKit.urlDecode",
+        "title": "URL Decode"
+      },
+      {
+        "command": "codeKit.openUnicode",
+        "title": "Open Unicode"
+      },
+      {
+        "command": "codeKit.unicodeEscape",
+        "title": "Unicode Escape"
+      },
+      {
+        "command": "codeKit.unicodeUnescape",
+        "title": "Unicode Unescape"
+      },
+      {
+        "command": "codeKit.openUnixTime",
+        "title": "Open Unix Time"
+      },
+      {
+        "command": "codeKit.insertCurrentTime",
+        "title": "Insert Current Time"
+      },
+      {
+        "command": "codeKit.openMd5",
+        "title": "Open MD5"
+      },
+      {
+        "command": "codeKit.md5Hash",
+        "title": "MD5 Hash"
+      },
+      {
+        "command": "codeKit.openUuid",
+        "title": "Open UUID"
+      },
+      {
+        "command": "codeKit.insertUuid",
+        "title": "Insert UUID"
+      },
+      {
+        "command": "codeKit.openVarName",
+        "title": "Open Variable Name"
+      },
+      {
+        "command": "codeKit.varNameCamel",
+        "title": "camelCase"
+      },
+      {
+        "command": "codeKit.varNameSnake",
+        "title": "snake_case"
+      },
+      {
+        "command": "codeKit.varNameKebab",
+        "title": "kebab-case"
+      },
+      {
+        "command": "codeKit.varNamePascal",
+        "title": "PascalCase"
+      },
+      {
+        "command": "codeKit.varNameConstant",
+        "title": "CONSTANT_CASE"
+      },
+      {
+        "command": "codeKit.jsonExpandDisabled",
+        "title": "JSON Expand (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.jsonCollapseDisabled",
+        "title": "JSON Collapse (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.base64EncodeDisabled",
+        "title": "Base64 Encode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.base64DecodeDisabled",
+        "title": "Base64 Decode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.urlEncodeDisabled",
+        "title": "URL Encode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.urlDecodeDisabled",
+        "title": "URL Decode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.unicodeEscapeDisabled",
+        "title": "Unicode Escape (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.unicodeUnescapeDisabled",
+        "title": "Unicode Unescape (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.md5HashDisabled",
+        "title": "MD5 Hash (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.varNameCamelDisabled",
+        "title": "camelCase (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.varNameSnakeDisabled",
+        "title": "snake_case (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.varNameKebabDisabled",
+        "title": "kebab-case (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.varNamePascalDisabled",
+        "title": "PascalCase (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.varNameConstantDisabled",
+        "title": "CONSTANT_CASE (需选中文字)",
+        "enablement": "editorHasSelection"
+      }
+    ],
+    "submenus": [
+      {
+        "id": "codeKit.editor",
+        "label": "CodeKit"
+      },
+      {
+        "id": "codeKit.json",
+        "label": "Json"
+      },
+      {
+        "id": "codeKit.base64",
+        "label": "Base64"
+      },
+      {
+        "id": "codeKit.url",
+        "label": "URL"
+      },
+      {
+        "id": "codeKit.unicode",
+        "label": "Unicode"
+      },
+      {
+        "id": "codeKit.unixTime",
+        "label": "Unix Time"
+      },
+      {
+        "id": "codeKit.md5",
+        "label": "MD5"
+      },
+      {
+        "id": "codeKit.uuid",
+        "label": "UUID"
+      },
+      {
+        "id": "codeKit.varName",
+        "label": "Variable Name"
       }
     ],
     "menus": {
+      "commandPalette": [
+        { "command": "codeKit.jsonExpandDisabled", "when": "false" },
+        { "command": "codeKit.jsonCollapseDisabled", "when": "false" },
+        { "command": "codeKit.base64EncodeDisabled", "when": "false" },
+        { "command": "codeKit.base64DecodeDisabled", "when": "false" },
+        { "command": "codeKit.urlEncodeDisabled", "when": "false" },
+        { "command": "codeKit.urlDecodeDisabled", "when": "false" },
+        { "command": "codeKit.unicodeEscapeDisabled", "when": "false" },
+        { "command": "codeKit.unicodeUnescapeDisabled", "when": "false" },
+        { "command": "codeKit.md5HashDisabled", "when": "false" },
+        { "command": "codeKit.varNameCamelDisabled", "when": "false" },
+        { "command": "codeKit.varNameSnakeDisabled", "when": "false" },
+        { "command": "codeKit.varNameKebabDisabled", "when": "false" },
+        { "command": "codeKit.varNamePascalDisabled", "when": "false" },
+        { "command": "codeKit.varNameConstantDisabled", "when": "false" }
+      ],
       "view/title": [
         {
           "command": "codeKit.refreshTools",
@@ -67,6 +300,243 @@
           "command": "codeKit.openNewWindow",
           "when": "view == codeKit.views.tools && viewItem == tool",
           "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "submenu": "codeKit.editor",
+          "when": "editorTextFocus && config.codeKit.contextMenuEnabled",
+          "group": "codeKit@1"
+        }
+      ],
+      "codeKit.editor": [
+        {
+          "submenu": "codeKit.json",
+          "group": "codeKit@1"
+        },
+        {
+          "submenu": "codeKit.base64",
+          "group": "codeKit@2"
+        },
+        {
+          "submenu": "codeKit.url",
+          "group": "codeKit@3"
+        },
+        {
+          "submenu": "codeKit.unicode",
+          "group": "codeKit@4"
+        },
+        {
+          "submenu": "codeKit.unixTime",
+          "group": "codeKit@5"
+        },
+        {
+          "submenu": "codeKit.md5",
+          "group": "codeKit@6"
+        },
+        {
+          "submenu": "codeKit.uuid",
+          "group": "codeKit@7"
+        },
+        {
+          "submenu": "codeKit.varName",
+          "group": "codeKit@8"
+        }
+      ],
+      "codeKit.json": [
+        {
+          "command": "codeKit.openJsonParser",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.jsonExpand",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.jsonExpandDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.jsonCollapse",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.jsonCollapseDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.base64": [
+        {
+          "command": "codeKit.openBase64",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.base64Encode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.base64EncodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.base64Decode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.base64DecodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.url": [
+        {
+          "command": "codeKit.openUrlEncode",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.urlEncode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.urlEncodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.urlDecode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.urlDecodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.unicode": [
+        {
+          "command": "codeKit.openUnicode",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.unicodeEscape",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.unicodeEscapeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.unicodeUnescape",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.unicodeUnescapeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.unixTime": [
+        {
+          "command": "codeKit.openUnixTime",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.insertCurrentTime",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.md5": [
+        {
+          "command": "codeKit.openMd5",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.md5Hash",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.md5HashDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.uuid": [
+        {
+          "command": "codeKit.openUuid",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.insertUuid",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.varName": [
+        {
+          "command": "codeKit.openVarName",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.varNameCamel",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameCamelDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameSnake",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameSnakeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameKebab",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameKebabDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNamePascal",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNamePascalDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameConstant",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.varNameConstantDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
         }
       ]
     }

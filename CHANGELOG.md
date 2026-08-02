@@ -1,5 +1,37 @@
 # Change Log
 
+## [0.0.7] - 2026-08-02
+
+### Added
+
+- **编辑器右键菜单**：在 VS Code 编辑器右键菜单中增加 CodeKit 子菜单，共 9 个分类、24 个命令
+  - **Json**：Open JSON Parser（打开 WebView 填充选中文本）/ JSON Expand（格式化原地替换）/ JSON Collapse（压缩原地替换）
+  - **Base64**：Open Base64（填充明文窗）/ Base64 Encode / Base64 Decode（原地替换）
+  - **URL**：Open URL Encoder（填充明文窗）/ URL Encode / URL Decode（原地替换）
+  - **Unicode**：Open Unicode（填充明文窗）/ Unicode Escape / Unicode Unescape（原地替换）
+  - **Unix Time**：Open Unix Time / Insert Current Time（替换选中或插入光标位置）
+  - **MD5**：Open MD5（填充输入窗）/ MD5 Hash（原地替换）
+  - **UUID**：Open UUID / Insert UUID（替换选中或插入光标位置）
+  - **Variable Name**：Open Variable Name（填充输入窗）/ camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE（原地替换）
+- **HelloWorld 右键菜单开关**：HelloWorld WebView 左上角新增 checkbox，默认勾选，通过 VS Code `configuration`（`codeKit.contextMenuEnabled`）持久化
+- **原地替换命令实现** `src/commands/textConvert.ts`：取选中文本 → 转换 → `editor.edit()` 替换选区，失败时 `showErrorMessage`
+- **JSON 格式化命令** `src/commands/jsonFormat.ts`：选中文本原地展开/收起
+- **需选中文本的命令在无选中时显示 disabled 状态**：带"(需选中文字)"后缀的灰色不可点击占位菜单项（通过命令级 `enablement: "editorHasSelection"` 实现）
+- **Open xxx 命令填充选中文本**：打开 WebView 时将选中文本填充到对应输入窗并触发解析/转换；面板已存在时 `reveal` 跳转并 `postMessage` 填充
+- 各 WebView 新增 `setInput` 消息监听器与 `initialText` 参数
+- `activationEvents: onStartupFinished` 确保扩展启动时激活
+
+### Changed
+
+- `Tool.run()` 接口新增 `initialText?: string` 参数，所有 9 个工具实现已更新
+- urlEncode 工具 commandId 从 `codeKit.urlEncode` 改为 `codeKit.urlEncoder`（避免与右键菜单编码命令重名）
+- i18n 新增 `hello.contextMenu` / `jsonFormat.error.parse` / `convert.error.decode` 键
+
+### Fixed
+
+- urlEncode 工具 commandId 与右键菜单命令重名导致 `command already exists` 错误，扩展激活中断，后续命令全部未注册
+- 缺少 `activationEvents` 导致扩展未在启动时激活，右键菜单不显示
+
 ## [0.0.6] - 2026-08-02
 
 ### Added
