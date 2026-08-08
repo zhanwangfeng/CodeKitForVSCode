@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "icon": "icons/icon-128.png",
@@ -257,6 +257,32 @@
       {
         "command": "codeKit.openRegex",
         "title": "Open Regex Tester"
+      },
+      {
+        "command": "codeKit.openHtmlEntity",
+        "title": "Open HTML Encode/Decode"
+      },
+      {
+        "command": "codeKit.htmlEncode",
+        "title": "HTML Encode"
+      },
+      {
+        "command": "codeKit.htmlEncodeDisabled",
+        "title": "HTML Encode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.htmlDecode",
+        "title": "HTML Decode"
+      },
+      {
+        "command": "codeKit.htmlDecodeDisabled",
+        "title": "HTML Decode (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.openTextCounter",
+        "title": "Open Text Counter"
       }
     ],
     "submenus": [
@@ -311,6 +337,14 @@
       {
         "id": "codeKit.regex",
         "label": "Regex"
+      },
+      {
+        "id": "codeKit.htmlEntity",
+        "label": "HTML Encode"
+      },
+      {
+        "id": "codeKit.textCounter",
+        "label": "Text Counter"
       }
     ],
     "menus": {
@@ -329,7 +363,9 @@
         { "command": "codeKit.varNameKebabDisabled", "when": "false" },
         { "command": "codeKit.varNamePascalDisabled", "when": "false" },
         { "command": "codeKit.varNameConstantDisabled", "when": "false" },
-        { "command": "codeKit.shaHashDisabled", "when": "false" }
+        { "command": "codeKit.shaHashDisabled", "when": "false" },
+        { "command": "codeKit.htmlEncodeDisabled", "when": "false" },
+        { "command": "codeKit.htmlDecodeDisabled", "when": "false" }
       ],
       "view/title": [
         {
@@ -400,6 +436,14 @@
         {
           "submenu": "codeKit.regex",
           "group": "codeKit@12"
+        },
+        {
+          "submenu": "codeKit.htmlEntity",
+          "group": "codeKit@13"
+        },
+        {
+          "submenu": "codeKit.textCounter",
+          "group": "codeKit@14"
         }
       ],
       "codeKit.json": [
@@ -629,6 +673,38 @@
       "codeKit.regex": [
         {
           "command": "codeKit.openRegex",
+          "group": "codeKit@1"
+        }
+      ],
+      "codeKit.htmlEntity": [
+        {
+          "command": "codeKit.openHtmlEntity",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.htmlEncode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.htmlEncodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.htmlDecode",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.htmlDecodeDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.textCounter": [
+        {
+          "command": "codeKit.openTextCounter",
           "group": "codeKit@1"
         }
       ]

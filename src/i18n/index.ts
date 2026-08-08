@@ -179,6 +179,32 @@ const messages: Record<string, Record<Locale, string>> = {
   'url.placeholder.right': { en: 'Enter URL-encoded text to decode...', 'zh-cn': '输入 URL 编码文本，自动解码...' },
   'url.error.decode': { en: 'URL decode failed', 'zh-cn': 'URL 解码失败' },
 
+  // —— HTML 实体 ——
+  'tool.htmlEntity.name': { en: 'HTML Encode/Decode', 'zh-cn': 'HTML 实体' },
+  'tool.htmlEntity.description': {
+    en: 'Encode and decode HTML entities (&amp; &lt; &gt; &quot; &#39;)',
+    'zh-cn': 'HTML 特殊字符实体编码与解码',
+  },
+  'htmlEntity.plaintext': { en: 'Plaintext', 'zh-cn': '明文' },
+  'htmlEntity.encoded': { en: 'Encoded (HTML Entities)', 'zh-cn': '实体(encode)' },
+  'htmlEntity.placeholder.left': { en: 'Enter text to encode...', 'zh-cn': '输入文本，自动编码为 HTML 实体...' },
+  'htmlEntity.placeholder.right': { en: 'Enter HTML entities to decode...', 'zh-cn': '输入 HTML 实体，自动解码...' },
+  'htmlEntity.error.decode': { en: 'HTML entity decode failed', 'zh-cn': 'HTML 实体解码失败' },
+
+  // —— 文本统计 ——
+  'tool.textCounter.name': { en: 'Text Counter', 'zh-cn': '文本统计' },
+  'tool.textCounter.description': {
+    en: 'Count characters, bytes, words, lines and non-whitespace chars',
+    'zh-cn': '统计字符数、字节数、单词数、行数与去空白字符数',
+  },
+  'textCounter.input': { en: 'Input', 'zh-cn': '输入' },
+  'textCounter.placeholder': { en: 'Type or paste text to count...', 'zh-cn': '输入或粘贴要统计的文本...' },
+  'textCounter.characters': { en: 'Characters', 'zh-cn': '字符数' },
+  'textCounter.bytes': { en: 'Bytes (UTF-8)', 'zh-cn': '字节数 (UTF-8)' },
+  'textCounter.words': { en: 'Words', 'zh-cn': '单词数' },
+  'textCounter.lines': { en: 'Lines', 'zh-cn': '行数' },
+  'textCounter.noWhitespace': { en: 'Non-whitespace', 'zh-cn': '去空白' },
+
   // —— 变量名转换 ——
   'tool.varName.name': { en: 'Variable Name', 'zh-cn': '变量名转换' },
   'tool.varName.description': {

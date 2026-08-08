@@ -33,6 +33,8 @@ A VSCode extension toolbox: collect common dev utilities into the sidebar, alway
 | JWT Decoder | Decode JWT header and payload (base64url, UTF-8 safe) |
 | Color Converter | Convert between HEX, RGB and HSL with live preview |
 | Regex Tester | Test regular expressions with match count and highlighting |
+| HTML Encode/Decode | Encode/decode HTML entities (`&amp; &lt; &gt; &quot; &#39;`), dual-pane editing |
+| Text Counter | Count characters, UTF-8 bytes, words, lines and non-whitespace chars |
 
 ## Editor Context Menu
 
@@ -52,6 +54,8 @@ Right-click in the editor to run operations on selected text, replacing it in pl
 | JWT | Open JWT Decoder | — |
 | Color | Open Color Converter | — |
 | Regex | Open Regex Tester | — |
+| HTML Encode | Open HTML Encode/Decode | HTML Encode / HTML Decode |
+| Text Counter | Open Text Counter | — |
 
 - **Open xxx**: Opens WebView and fills the input pane with selected text
 - **In-place replace**: Takes selected text → transforms → replaces selection; shows error on failure
@@ -80,7 +84,7 @@ Right-click in the editor to run operations on selected text, replacing it in pl
 ### Editor Context Menu
 
 1. Select text in the editor
-2. Right-click → **CodeKit** → choose a category (Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex)
+2. Right-click → **CodeKit** → choose a category (Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex / HTML Encode / Text Counter)
 3. Pick an action:
    - **Open xxx** — Opens the tool's WebView and fills the input pane with selected text
    - **Encode/Decode/Format** — Replaces the selected text with the transformed result in place
@@ -114,6 +118,7 @@ Or search "CodeKit" in the VS Code Extensions panel (`Ctrl+Shift+X`).
 - **0.0.7**: Editor context menu (9 categories, 24 commands, in-place text replacement) + HelloWorld toggle
 - **0.0.8**: Extension icon
 - **0.0.9**: SHA Hash / JWT Decoder / Color Converter / Regex Tester tools + context menu entries
+- **0.0.10**: HTML Encode/Decode + Text Counter tools + context menu entries
 
 ## License
 

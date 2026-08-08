@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.0.10] - 2026-08-08
+
+### Added
+
+- **HTML 实体编码/解码工具**：左明文右实体，双向实时同步；编码 `& < > " '` 等 HTML 特殊字符，支持解码还原（复用通用双栏构建器，与 URL Encode 一致）
+- **文本统计工具 (Text Counter)**：输入文本实时统计字符数、UTF-8 字节数、单词数、行数与去空白字符数（统计卡片网格 + 专用 WebView）
+- **右键菜单补充**：CodeKit 子菜单新增 2 个分类
+  - **HTML Encode**：Open HTML Encode/Decode / HTML Encode / HTML Decode（选中文本原地替换）
+  - **Text Counter**：Open Text Counter（打开 WebView 并填充选中文本）
+- **HTML 实体原地替换命令** `src/commands/textConvert.ts`：新增 `htmlEncode()` / `htmlDecode()`
+- **HTML Encode / HTML Decode disabled 占位命令**：无选中文字时显示灰色 `(需选中文字)` 菜单项
+
 ## [0.0.9] - 2026-08-08
 
 ### Added
