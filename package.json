@@ -2,7 +2,7 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "zhanwangfeng",
   "license": "MIT",
   "icon": "icons/icon-128.png",
@@ -232,6 +232,31 @@
         "command": "codeKit.varNameConstantDisabled",
         "title": "CONSTANT_CASE (需选中文字)",
         "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.openSha",
+        "title": "Open SHA Hash"
+      },
+      {
+        "command": "codeKit.shaHash",
+        "title": "SHA-256 Hash"
+      },
+      {
+        "command": "codeKit.shaHashDisabled",
+        "title": "SHA-256 Hash (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.openJwt",
+        "title": "Open JWT Decoder"
+      },
+      {
+        "command": "codeKit.openColor",
+        "title": "Open Color Converter"
+      },
+      {
+        "command": "codeKit.openRegex",
+        "title": "Open Regex Tester"
       }
     ],
     "submenus": [
@@ -270,6 +295,22 @@
       {
         "id": "codeKit.varName",
         "label": "Variable Name"
+      },
+      {
+        "id": "codeKit.sha",
+        "label": "SHA"
+      },
+      {
+        "id": "codeKit.jwt",
+        "label": "JWT"
+      },
+      {
+        "id": "codeKit.color",
+        "label": "Color"
+      },
+      {
+        "id": "codeKit.regex",
+        "label": "Regex"
       }
     ],
     "menus": {
@@ -287,7 +328,8 @@
         { "command": "codeKit.varNameSnakeDisabled", "when": "false" },
         { "command": "codeKit.varNameKebabDisabled", "when": "false" },
         { "command": "codeKit.varNamePascalDisabled", "when": "false" },
-        { "command": "codeKit.varNameConstantDisabled", "when": "false" }
+        { "command": "codeKit.varNameConstantDisabled", "when": "false" },
+        { "command": "codeKit.shaHashDisabled", "when": "false" }
       ],
       "view/title": [
         {
@@ -342,6 +384,22 @@
         {
           "submenu": "codeKit.varName",
           "group": "codeKit@8"
+        },
+        {
+          "submenu": "codeKit.sha",
+          "group": "codeKit@9"
+        },
+        {
+          "submenu": "codeKit.jwt",
+          "group": "codeKit@10"
+        },
+        {
+          "submenu": "codeKit.color",
+          "group": "codeKit@11"
+        },
+        {
+          "submenu": "codeKit.regex",
+          "group": "codeKit@12"
         }
       ],
       "codeKit.json": [
@@ -538,6 +596,40 @@
           "command": "codeKit.varNameConstantDisabled",
           "when": "!editorHasSelection",
           "group": "codeKit@2"
+        }
+      ],
+      "codeKit.sha": [
+        {
+          "command": "codeKit.openSha",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.shaHash",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.shaHashDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.jwt": [
+        {
+          "command": "codeKit.openJwt",
+          "group": "codeKit@1"
+        }
+      ],
+      "codeKit.color": [
+        {
+          "command": "codeKit.openColor",
+          "group": "codeKit@1"
+        }
+      ],
+      "codeKit.regex": [
+        {
+          "command": "codeKit.openRegex",
+          "group": "codeKit@1"
         }
       ]
     }

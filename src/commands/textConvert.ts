@@ -90,6 +90,15 @@ export function md5Hash(editor: vscode.TextEditor): void {
   editor.edit((b) => b.replace(editor.selection, hash));
 }
 
+// —— SHA ——
+
+export function sha256Hash(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection);
+  if (!text) return;
+  const hash = crypto.createHash('sha256').update(text, 'utf-8').digest('hex');
+  editor.edit((b) => b.replace(editor.selection, hash));
+}
+
 // —— 插入当前时间 ——
 
 export function insertCurrentTime(editor: vscode.TextEditor): void {

@@ -1,5 +1,21 @@
 # Change Log
 
+## [0.0.9] - 2026-08-08
+
+### Added
+
+- **SHA 哈希工具**：选择 SHA-1 / SHA-256 / SHA-512 算法，实时计算输入文本哈希（WebView 内使用 Web Crypto，无运行时依赖）
+- **JWT 解码工具**：粘贴 JWT，解码展示 header / payload 与 signature 十六进制，UTF-8 安全
+- **颜色转换工具**：输入任意格式颜色（HEX/RGB/HSL），实时互转并输出色块预览
+- **正则测试工具**：正则 + 标志（g/i/m/s/u）+ 测试文本，实时显示匹配数、匹配列表与高亮预览
+- **右键菜单补充**：CodeKit 子菜单新增 4 个分类
+  - **SHA**：Open SHA Hash / SHA-256 Hash（选中文本原地替换）
+  - **JWT**：Open JWT Decoder（打开 WebView）
+  - **Color**：Open Color Converter（打开 WebView 并填充选中文本）
+  - **Regex**：Open Regex Tester（打开 WebView 并填充选中文本到测试窗）
+- **SHA-256 原地替换命令** `src/commands/textConvert.ts`：新增 `sha256Hash()`，选中文本 → SHA-256 哈希，失败不编辑
+- **SHA-256 Hash disabled 占位命令**：无选中文字时显示灰色 `(需选中文字)` 菜单项
+
 ## [0.0.8] - 2026-08-02
 
 ### Added

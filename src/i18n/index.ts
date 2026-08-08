@@ -192,6 +192,67 @@ const messages: Record<string, Record<Locale, string>> = {
   'varName.pascal': { en: 'PascalCase', 'zh-cn': 'PascalCase' },
   'varName.constant': { en: 'CONSTANT_CASE', 'zh-cn': 'CONSTANT_CASE' },
 
+  // —— SHA 哈希 ——
+  'tool.sha.name': { en: 'SHA Hash', 'zh-cn': 'SHA 哈希' },
+  'tool.sha.description': {
+    en: 'Compute SHA-1 / SHA-256 / SHA-512 hashes',
+    'zh-cn': '计算 SHA-1 / SHA-256 / SHA-512 哈希',
+  },
+  'sha.algorithm': { en: 'Algorithm', 'zh-cn': '算法' },
+  'sha.input': { en: 'Input', 'zh-cn': '输入' },
+  'sha.output': { en: 'Hash', 'zh-cn': '哈希值' },
+  'sha.placeholder': { en: 'Enter text to hash...', 'zh-cn': '输入要计算哈希的文本...' },
+
+  // —— JWT 解码 ——
+  'tool.jwt.name': { en: 'JWT Decoder', 'zh-cn': 'JWT 解码' },
+  'tool.jwt.description': {
+    en: 'Decode JWT header and payload',
+    'zh-cn': '解码 JWT 的 header 与 payload',
+  },
+  'jwt.input': { en: 'Token', 'zh-cn': 'Token' },
+  'jwt.placeholder': { en: 'Paste a JWT here...', 'zh-cn': '在此粘贴 JWT...' },
+  'jwt.header': { en: 'Header', 'zh-cn': 'Header' },
+  'jwt.payload': { en: 'Payload', 'zh-cn': 'Payload' },
+  'jwt.signature': { en: 'Signature', 'zh-cn': 'Signature' },
+  'jwt.invalid': {
+    en: 'Invalid JWT: expected 3 dot-separated segments',
+    'zh-cn': '无效 JWT：应为三段点分结构',
+  },
+  'jwt.decodeError': { en: 'Segment base64url decode failed', 'zh-cn': '分段 base64url 解码失败' },
+
+  // —— 颜色转换 ——
+  'tool.color.name': { en: 'Color Converter', 'zh-cn': '颜色转换' },
+  'tool.color.description': {
+    en: 'Convert between HEX, RGB and HSL',
+    'zh-cn': 'HEX / RGB / HSL 颜色互转',
+  },
+  'color.input': { en: 'Color', 'zh-cn': '颜色' },
+  'color.placeholder': {
+    en: 'Type a color, e.g. #ff0000, rgb(255,0,0), hsl(0,100%,50%)',
+    'zh-cn': '输入颜色，如 #ff0000、rgb(255,0,0)、hsl(0,100%,50%)',
+  },
+  'color.preview': { en: 'Preview', 'zh-cn': '预览' },
+  'color.hex': { en: 'HEX', 'zh-cn': 'HEX' },
+  'color.rgb': { en: 'RGB', 'zh-cn': 'RGB' },
+  'color.hsl': { en: 'HSL', 'zh-cn': 'HSL' },
+  'color.invalid': { en: 'Unrecognized color format', 'zh-cn': '无法识别的颜色格式' },
+
+  // —— 正则测试 ——
+  'tool.regex.name': { en: 'Regex Tester', 'zh-cn': '正则测试' },
+  'tool.regex.description': {
+    en: 'Test regular expressions with match highlighting',
+    'zh-cn': '正则表达式测试，实时显示匹配结果与高亮',
+  },
+  'regex.pattern': { en: 'Pattern', 'zh-cn': '正则' },
+  'regex.flags': { en: 'Flags', 'zh-cn': '标志' },
+  'regex.testText': { en: 'Test Text', 'zh-cn': '测试文本' },
+  'regex.patternPlaceholder': { en: 'e.g. \\b\\w+@\\w+\\.\\w+', 'zh-cn': '例如 \\b\\w+@\\w+\\.\\w+' },
+  'regex.testPlaceholder': { en: 'Enter text to test against...', 'zh-cn': '输入用于测试的文本...' },
+  'regex.matches': { en: 'Matches', 'zh-cn': '匹配结果' },
+  'regex.matchCount': { en: '{count} matches', 'zh-cn': '共 {count} 个匹配' },
+  'regex.noMatch': { en: 'No matches', 'zh-cn': '无匹配' },
+  'regex.invalid': { en: 'Invalid regular expression', 'zh-cn': '正则表达式无效' },
+
   // —— 编辑器右键命令 ——
   'jsonFormat.error.parse': { en: 'JSON parse failed', 'zh-cn': 'JSON 解析失败' },
   'convert.error.decode': { en: 'Decode failed', 'zh-cn': '解码失败' },

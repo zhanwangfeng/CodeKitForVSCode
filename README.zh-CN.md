@@ -33,6 +33,10 @@
 | MD5 | 计算输入文本的 MD5 哈希 |
 | URL 编码 | URL 组件编码/解码 |
 | 变量名转换 | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE 互转 |
+| SHA 哈希 | 计算 SHA-1 / SHA-256 / SHA-512 哈希 |
+| JWT 解码 | 解码 JWT 的 header 与 payload（base64url，UTF-8 安全） |
+| 颜色转换 | HEX / RGB / HSL 互转，实时色块预览 |
+| 正则测试 | 正则表达式测试，实时显示匹配结果与高亮 |
 
 ## 编辑器右键菜单
 
@@ -48,6 +52,10 @@
 | MD5 | Open MD5 | MD5 Hash |
 | UUID | Open UUID / Insert UUID | — |
 | Variable Name | Open Variable Name | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE |
+| SHA | Open SHA Hash | SHA-256 Hash |
+| JWT | Open JWT Decoder | — |
+| Color | Open Color Converter | — |
+| Regex | Open Regex Tester | — |
 
 - **Open xxx**：打开 WebView 并填充选中文本到输入窗
 - **原地替换**：取选中文本 → 转换 → 替换选区，失败时提示错误
@@ -76,7 +84,7 @@
 ### 编辑器右键菜单
 
 1. 在编辑器中选中文本
-2. 右键 → **CodeKit** → 选择分类（Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name）
+2. 右键 → **CodeKit** → 选择分类（Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex）
 3. 选择操作：
    - **Open xxx** — 打开工具 WebView 并填充选中文本到输入窗
    - **编码/解码/格式化** — 将选中文本转换后原地替换
@@ -108,6 +116,8 @@
 - **0.0.5**：多语言支持（英文 / 简体中文，Hello World 内切换）
 - **0.0.6**：新增 7 个转换工具 + Converter 通用框架 + 面板复用 + 语言实时切换
 - **0.0.7**：编辑器右键菜单（9 分类 24 命令，选中文本原地替换）+ HelloWorld 右键菜单开关
+- **0.0.8**：扩展图标
+- **0.0.9**：新增 SHA 哈希 / JWT 解码 / 颜色转换 / 正则测试 4 个工具 + 右键菜单入口
 
 ## License
 

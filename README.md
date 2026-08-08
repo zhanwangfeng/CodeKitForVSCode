@@ -29,6 +29,10 @@ A VSCode extension toolbox: collect common dev utilities into the sidebar, alway
 | MD5 | Compute MD5 hash of input text |
 | URL Encode | URL component encode/decode |
 | Variable Name | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE conversion |
+| SHA Hash | Compute SHA-1 / SHA-256 / SHA-512 hashes |
+| JWT Decoder | Decode JWT header and payload (base64url, UTF-8 safe) |
+| Color Converter | Convert between HEX, RGB and HSL with live preview |
+| Regex Tester | Test regular expressions with match count and highlighting |
 
 ## Editor Context Menu
 
@@ -44,6 +48,10 @@ Right-click in the editor to run operations on selected text, replacing it in pl
 | MD5 | Open MD5 | MD5 Hash |
 | UUID | Open UUID / Insert UUID | — |
 | Variable Name | Open Variable Name | camelCase / snake_case / kebab-case / PascalCase / CONSTANT_CASE |
+| SHA | Open SHA Hash | SHA-256 Hash |
+| JWT | Open JWT Decoder | — |
+| Color | Open Color Converter | — |
+| Regex | Open Regex Tester | — |
 
 - **Open xxx**: Opens WebView and fills the input pane with selected text
 - **In-place replace**: Takes selected text → transforms → replaces selection; shows error on failure
@@ -72,7 +80,7 @@ Right-click in the editor to run operations on selected text, replacing it in pl
 ### Editor Context Menu
 
 1. Select text in the editor
-2. Right-click → **CodeKit** → choose a category (Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name)
+2. Right-click → **CodeKit** → choose a category (Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex)
 3. Pick an action:
    - **Open xxx** — Opens the tool's WebView and fills the input pane with selected text
    - **Encode/Decode/Format** — Replaces the selected text with the transformed result in place
@@ -104,6 +112,8 @@ Or search "CodeKit" in the VS Code Extensions panel (`Ctrl+Shift+X`).
 - **0.0.5**: i18n support (English / Simplified Chinese, switch in Hello World)
 - **0.0.6**: 7 converter tools + Converter framework + panel reuse + real-time language switching
 - **0.0.7**: Editor context menu (9 categories, 24 commands, in-place text replacement) + HelloWorld toggle
+- **0.0.8**: Extension icon
+- **0.0.9**: SHA Hash / JWT Decoder / Color Converter / Regex Tester tools + context menu entries
 
 ## License
 

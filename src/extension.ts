@@ -11,6 +11,7 @@ import {
   insertCurrentTime,
   insertUuid,
   md5Hash,
+  sha256Hash,
   toCamelCase,
   toConstantCase,
   toKebabCase,
@@ -22,8 +23,12 @@ import {
   urlEncode,
 } from './commands/textConvert';
 import { base64Tool } from './tools/converters/base64';
+import { colorTool } from './tools/converters/color';
 import { jsonParserTool } from './tools/jsonParser';
+import { jwtTool } from './tools/converters/jwt';
 import { md5Tool } from './tools/converters/md5';
+import { regexTool } from './tools/converters/regex';
+import { shaTool } from './tools/converters/sha';
 import { unicodeTool } from './tools/converters/unicode';
 import { unixTimeTool } from './tools/converters/unixTime';
 import { urlEncodeTool } from './tools/converters/urlEncode';
@@ -233,6 +238,38 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
   );
 
+  // —— 编辑器右键：SHA ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openSha', () =>
+      openToolWithSelection(shaTool, context),
+    ),
+    vscode.commands.registerCommand('codeKit.shaHash', () => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor) sha256Hash(editor);
+    }),
+  );
+
+  // —— 编辑器右键：JWT ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openJwt', () =>
+      openToolWithSelection(jwtTool, context),
+    ),
+  );
+
+  // —— 编辑器右键：颜色 ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openColor', () =>
+      openToolWithSelection(colorTool, context),
+    ),
+  );
+
+  // —— 编辑器右键：正则 ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openRegex', () =>
+      openToolWithSelection(regexTool, context),
+    ),
+  );
+
   // 语言切换时更新所有已打开面板的标签标题，并通过 onLocaleChange 通知 WebView 原地更新全部文案
   context.subscriptions.push(
     vscode.commands.registerCommand('codeKit.updatePanelTitles', () => {
@@ -260,6 +297,7 @@ export function activate(context: vscode.ExtensionContext): void {
     'codeKit.varNameCamelDisabled', 'codeKit.varNameSnakeDisabled',
     'codeKit.varNameKebabDisabled', 'codeKit.varNamePascalDisabled',
     'codeKit.varNameConstantDisabled',
+    'codeKit.shaHashDisabled',
   ];
   for (const cmd of disabledCommands) {
     context.subscriptions.push(vscode.commands.registerCommand(cmd, () => {}));
