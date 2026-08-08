@@ -37,6 +37,8 @@
 | JWT 解码 | 解码 JWT 的 header 与 payload（base64url，UTF-8 安全） |
 | 颜色转换 | HEX / RGB / HSL 互转，实时色块预览 |
 | 正则测试 | 正则表达式测试，实时显示匹配结果与高亮 |
+| HTML 实体 | HTML 特殊字符实体编码与解码（`&amp; &lt; &gt; &quot; &#39;`，双向编辑） |
+| 文本统计 | 实时统计字符数、UTF-8 字节数、单词数、行数与去空白字符数 |
 
 ## 编辑器右键菜单
 
@@ -56,6 +58,8 @@
 | JWT | Open JWT Decoder | — |
 | Color | Open Color Converter | — |
 | Regex | Open Regex Tester | — |
+| HTML Encode | Open HTML Encode/Decode | HTML Encode / HTML Decode |
+| Text Counter | Open Text Counter | — |
 
 - **Open xxx**：打开 WebView 并填充选中文本到输入窗
 - **原地替换**：取选中文本 → 转换 → 替换选区，失败时提示错误
@@ -84,7 +88,7 @@
 ### 编辑器右键菜单
 
 1. 在编辑器中选中文本
-2. 右键 → **CodeKit** → 选择分类（Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex）
+2. 右键 → **CodeKit** → 选择分类（Json / Base64 / URL / Unicode / Unix Time / MD5 / UUID / Variable Name / SHA / JWT / Color / Regex / HTML Encode / Text Counter）
 3. 选择操作：
    - **Open xxx** — 打开工具 WebView 并填充选中文本到输入窗
    - **编码/解码/格式化** — 将选中文本转换后原地替换
@@ -118,6 +122,7 @@
 - **0.0.7**：编辑器右键菜单（9 分类 24 命令，选中文本原地替换）+ HelloWorld 右键菜单开关
 - **0.0.8**：扩展图标
 - **0.0.9**：新增 SHA 哈希 / JWT 解码 / 颜色转换 / 正则测试 4 个工具 + 右键菜单入口
+- **0.0.10**：新增 HTML 实体编码/解码 / 文本统计 2 个工具 + 右键菜单入口
 
 ## License
 

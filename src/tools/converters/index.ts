@@ -1,10 +1,12 @@
 /** 转换工具的注册表，按展示顺序导出 converterTools。 */
 import { base64Tool } from './base64';
 import { colorTool } from './color';
+import { htmlEntityTool } from './htmlEntity';
 import { jwtTool } from './jwt';
 import { md5Tool } from './md5';
 import { regexTool } from './regex';
 import { shaTool } from './sha';
+import { textCounterTool } from './textCounter';
 import { unicodeTool } from './unicode';
 import { unixTimeTool } from './unixTime';
 import { urlEncodeTool } from './urlEncode';
@@ -25,4 +27,6 @@ export const converterTools: readonly Tool[] = [
   jwtTool,
   colorTool,
   regexTool,
+  htmlEntityTool,
+  textCounterTool,
 ];

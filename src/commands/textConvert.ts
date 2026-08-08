@@ -163,3 +163,31 @@ export function toConstantCase(editor: vscode.TextEditor): void {
   if (!text) return;
   editor.edit((b) => b.replace(editor.selection, tokenize(text).join('_').toUpperCase()));
 }
+
+// —— HTML 实体 ——
+
+export function htmlEncode(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection);
+  if (!text) return;
+  const encoded = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  editor.edit((b) => b.replace(editor.selection, encoded));
+}
+
+export function htmlDecode(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection).trim();
+  if (!text) return;
+  // 替换命名与数字实体为对应字符
+  const decoded = text
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&#(\d+);/g, (_m, code: string) => String.fromCharCode(parseInt(code, 10)));
+  editor.edit((b) => b.replace(editor.selection, decoded));
+}
