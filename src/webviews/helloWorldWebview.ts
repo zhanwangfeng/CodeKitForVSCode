@@ -15,6 +15,7 @@ export function getHelloWorldLocalePayload() {
       t('hello.feature.4'),
     ],
     contextMenuLabel: t('hello.contextMenu'),
+    siteLink: t('hello.siteLink'),
   };
 }
 
@@ -65,6 +66,40 @@ export function getHelloWorldWebviewContent(contextMenuEnabled: boolean): string
     color: #05060f;
     background: linear-gradient(135deg, #ff6ec4, #4adede);
     border-color: transparent;
+    font-weight: 600;
+  }
+  .site-link {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 16px;
+    font-size: 13px;
+    color: #c9d2ff;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    opacity: 0.8;
+    transition: opacity 0.15s, background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .site-link:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateX(-50%) scale(1.04);
+  }
+  .site-link .site-link-label {
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6ec4, #4adede);
+    color: #05060f;
     font-weight: 600;
   }
   .ctx-menu-toggle {
@@ -163,6 +198,7 @@ export function getHelloWorldWebviewContent(contextMenuEnabled: boolean): string
 </style>
 </head>
 <body>
+  <a class="site-link" href="https://codejson.cn/" target="_blank">codejson.cn <span class="site-link-label" id="siteLinkLabel">${t('hello.siteLink')}</span> ↗</a>
   <label class="ctx-menu-toggle">
     <input type="checkbox" id="ctxMenuCb"${contextMenuEnabled ? ' checked' : ''}>
     <span id="ctxMenuLabel">${t('hello.contextMenu')}</span>
@@ -207,6 +243,7 @@ export function getHelloWorldWebviewContent(contextMenuEnabled: boolean): string
           });
         }
         if (d.contextMenuLabel) document.getElementById('ctxMenuLabel').textContent = d.contextMenuLabel;
+        if (d.siteLink) document.getElementById('siteLinkLabel').textContent = d.siteLink;
       }
     });
 

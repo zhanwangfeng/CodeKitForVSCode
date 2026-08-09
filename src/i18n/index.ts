@@ -52,6 +52,7 @@ const messages: Record<string, Record<Locale, string>> = {
   'hello.lang.en': { en: 'English', 'zh-cn': 'English' },
   'hello.lang.zh': { en: '简体中文', 'zh-cn': '简体中文' },
   'hello.contextMenu': { en: 'Context Menu', 'zh-cn': '右键菜单' },
+  'hello.siteLink': { en: 'Web Version', 'zh-cn': '网页版' },
 
   // —— 通用文案（多工具共用）——
   'common.wrap': { en: 'Wrap', 'zh-cn': '自动换行' },
