@@ -62,6 +62,12 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "codeKit.filterTools",
+        "title": "Filter Tools",
+        "category": "CodeKit",
+        "icon": "$(filter)"
+      },
+      {
         "command": "codeKit.openNewWindow",
         "title": "Open New Window",
         "category": "CodeKit",
@@ -370,6 +376,11 @@
       "view/title": [
         {
           "command": "codeKit.refreshTools",
+          "when": "view == codeKit.views.tools",
+          "group": "navigation"
+        },
+        {
+          "command": "codeKit.filterTools",
           "when": "view == codeKit.views.tools",
           "group": "navigation"
         }
