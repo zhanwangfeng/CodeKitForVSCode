@@ -1,6 +1,6 @@
 /** 扩展入口：初始化 i18n、注册各工具命令与 Tools Tree View，管理 WebView 面板复用。 */
 import * as vscode from 'vscode';
-import { initI18n } from './i18n';
+import { initI18n, t } from './i18n';
 import { ToolsTreeProvider } from './tree/toolsTreeProvider';
 import { tools } from './tools';
 import { Tool } from './tools/tool';
@@ -120,6 +120,46 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('codeKit.refreshTools', () => treeProvider.refresh()),
+  );
+
+  // 工具列表筛选：QuickPick 顶部输入框 + 下方实时过滤列表（输入为空时隐藏列表）
+  // ↑/↓ + Enter 或 鼠标单击 均触发 onDidAccept 打开选中工具
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.filterTools', () => {
+      const items: (vscode.QuickPickItem & { tool: Tool })[] = tools.map(t => ({
+        label: t.name,
+        description: t.description,
+        iconPath: t.icon ?? new vscode.ThemeIcon('tools'),
+        tool: t,
+      }));
+
+      const qp = vscode.window.createQuickPick<vscode.QuickPickItem & { tool: Tool }>();
+      qp.title = t('tools.filter.title');
+      qp.placeholder = t('tools.filter.placeholder');
+      qp.matchOnDescription = true; // description 也参与原生模糊匹配
+      qp.items = []; // 输入为空时不显示列表
+
+      let listVisible = false;
+      qp.onDidChangeValue(value => {
+        const hasInput = value.trim() !== '';
+        if (hasInput !== listVisible) {
+          qp.items = hasInput ? items : [];
+          listVisible = hasInput;
+        }
+      });
+
+      // Enter / 鼠标单击 均触发：打开选中工具（复用既有命令，含面板复用）
+      qp.onDidAccept(() => {
+        const picked = qp.activeItems[0];
+        if (picked) {
+          vscode.commands.executeCommand(picked.tool.commandId);
+        }
+        qp.hide();
+      });
+
+      qp.onDidHide(() => qp.dispose());
+      qp.show();
+    }),
   );
 
   // —— 编辑器右键：JSON 展开/收起/打开 ——

@@ -19,6 +19,13 @@ const messages: Record<string, Record<Locale, string>> = {
     'zh-cn': 'JSON解析工具：实时解析JSON字符串，可视化展示',
   },
 
+  // —— 工具列表筛选 ——
+  'tools.filter.title': { en: 'Filter Tools', 'zh-cn': '筛选工具' },
+  'tools.filter.placeholder': {
+    en: 'Type to filter tools...',
+    'zh-cn': '输入以筛选工具...',
+  },
+
   // —— Hello World WebView ——
   'hello.title': { en: 'CodeKit', 'zh-cn': 'CodeKit' },
   'hello.intro': {
