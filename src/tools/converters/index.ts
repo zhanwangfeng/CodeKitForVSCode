@@ -6,6 +6,7 @@ import { jwtTool } from './jwt';
 import { md5Tool } from './md5';
 import { regexTool } from './regex';
 import { shaTool } from './sha';
+import { sqlTool } from './sql';
 import { textCounterTool } from './textCounter';
 import { unicodeTool } from './unicode';
 import { unixTimeTool } from './unixTime';
@@ -29,4 +30,5 @@ export const converterTools: readonly Tool[] = [
   regexTool,
   htmlEntityTool,
   textCounterTool,
+  sqlTool,
 ];

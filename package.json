@@ -289,6 +289,19 @@
       {
         "command": "codeKit.openTextCounter",
         "title": "Open Text Counter"
+      },
+      {
+        "command": "codeKit.openSql",
+        "title": "Open SQL Formatter"
+      },
+      {
+        "command": "codeKit.sqlFormat",
+        "title": "Format SQL"
+      },
+      {
+        "command": "codeKit.sqlFormatDisabled",
+        "title": "Format SQL (需选中文字)",
+        "enablement": "editorHasSelection"
       }
     ],
     "submenus": [
@@ -351,6 +364,10 @@
       {
         "id": "codeKit.textCounter",
         "label": "Text Counter"
+      },
+      {
+        "id": "codeKit.sql",
+        "label": "SQL Formatter"
       }
     ],
     "menus": {
@@ -371,7 +388,8 @@
         { "command": "codeKit.varNameConstantDisabled", "when": "false" },
         { "command": "codeKit.shaHashDisabled", "when": "false" },
         { "command": "codeKit.htmlEncodeDisabled", "when": "false" },
-        { "command": "codeKit.htmlDecodeDisabled", "when": "false" }
+        { "command": "codeKit.htmlDecodeDisabled", "when": "false" },
+        { "command": "codeKit.sqlFormatDisabled", "when": "false" }
       ],
       "view/title": [
         {
@@ -455,6 +473,10 @@
         {
           "submenu": "codeKit.textCounter",
           "group": "codeKit@14"
+        },
+        {
+          "submenu": "codeKit.sql",
+          "group": "codeKit@15"
         }
       ],
       "codeKit.json": [
@@ -717,6 +739,22 @@
         {
           "command": "codeKit.openTextCounter",
           "group": "codeKit@1"
+        }
+      ],
+      "codeKit.sql": [
+        {
+          "command": "codeKit.openSql",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.sqlFormat",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.sqlFormatDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
         }
       ]
     }

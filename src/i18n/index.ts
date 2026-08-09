@@ -213,6 +213,21 @@ const messages: Record<string, Record<Locale, string>> = {
   'textCounter.lines': { en: 'Lines', 'zh-cn': '行数' },
   'textCounter.noWhitespace': { en: 'Non-whitespace', 'zh-cn': '去空白' },
 
+  // —— SQL 格式化 ——
+  'tool.sql.name': { en: 'SQL Formatter', 'zh-cn': 'SQL 格式化' },
+  'tool.sql.description': {
+    en: 'Format SQL statements with keyword case and indentation options',
+    'zh-cn': 'SQL 语句格式化，支持关键字大小写与缩进设置',
+  },
+  'sql.input': { en: 'Input', 'zh-cn': '输入' },
+  'sql.output': { en: 'Formatted', 'zh-cn': '格式化结果' },
+  'sql.placeholder.left': { en: 'Paste your SQL here...', 'zh-cn': '在此粘贴 SQL...' },
+  'sql.placeholder.right': { en: 'Formatted SQL appears here...', 'zh-cn': '格式化后的 SQL 显示在此...' },
+  'sql.keywordCase': { en: 'Keyword Case', 'zh-cn': '关键字大小写' },
+  'sql.keywordUpper': { en: 'UPPER', 'zh-cn': '大写' },
+  'sql.keywordLower': { en: 'lower', 'zh-cn': '小写' },
+  'sql.indent': { en: 'Indent', 'zh-cn': '缩进' },
+
   // —— 变量名转换 ——
   'tool.varName.name': { en: 'Variable Name', 'zh-cn': '变量名转换' },
   'tool.varName.description': {

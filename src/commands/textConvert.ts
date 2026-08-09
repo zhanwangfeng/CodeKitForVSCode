@@ -164,6 +164,47 @@ export function toConstantCase(editor: vscode.TextEditor): void {
   editor.edit((b) => b.replace(editor.selection, tokenize(text).join('_').toUpperCase()));
 }
 
+// —— SQL 格式化 ——
+
+/** 将选中 SQL 格式化为单行规范输出（关键字大写、基础换行/缩进）。完整排版请用 SQL Formatter 面板。 */
+export function sqlFormat(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection).trim();
+  if (!text) return;
+  editor.edit((b) => b.replace(editor.selection, formatSqlInline(text)));
+}
+
+/** 轻量 SQL 格式化：压缩空白 + 关键字大写 + 子句换行缩进（就地替换版，逻辑与面板保持一致的简化版） */
+function formatSqlInline(sql: string): string {
+  // 保护字符串字面量
+  const strings: string[] = [];
+  const protectedSql = sql.replace(/'(?:''|[^'])*'|"(?:[^"]|"")*"/g, (m) => {
+    strings.push(m);
+    return '\u0000' + (strings.length - 1) + '\u0000';
+  });
+  const oneLine = protectedSql.replace(/\s+/g, ' ').replace(
+    /\b(?:select|from|where|group\s+by|order\s+by|having|limit|offset|join|inner\s+join|left\s+join|right\s+join|full\s+join|left\s+outer\s+join|right\s+outer\s+join|cross\s+join|union\s+all|union|insert\s+into|values|update|set|delete\s+from|create\s+table|create\s+index|create\s+view|alter\s+table|drop\s+table|add\s+column|drop\s+column|primary\s+key|foreign\s+key|unique|not\s+null|default|references|on|as|and|or|not|in|is|null|between|like|exists|distinct|case|when|then|else|end|asc|desc)\b/gi,
+    (m) => m.toUpperCase(),
+  );
+  const clauses = [
+    'SELECT','FROM','WHERE','GROUP BY','ORDER BY','HAVING','LIMIT','OFFSET',
+    'INNER JOIN','LEFT JOIN','RIGHT JOIN','FULL JOIN','LEFT OUTER JOIN','RIGHT OUTER JOIN','CROSS JOIN','JOIN',
+    'UNION ALL','UNION','INSERT INTO','VALUES','UPDATE','SET','DELETE FROM',
+  ];
+  const joined = clauses
+    .map((k) => k.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&'))
+    .join('|');
+  let out = oneLine.replace(new RegExp('\\b(' + joined + ')\\b', 'gi'), '\n$1');
+  out = out.replace(/^\n+/, '');
+  const lines = out.split('\n');
+  const result: string[] = [];
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) continue;
+    result.push(line);
+  }
+  return result.join('\n').replace(/\u0000(\d+)\u0000/g, (_m, idx) => strings[parseInt(idx, 10)]);
+}
+
 // —— HTML 实体 ——
 
 export function htmlEncode(editor: vscode.TextEditor): void {
