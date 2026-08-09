@@ -302,6 +302,37 @@ const messages: Record<string, Record<Locale, string>> = {
   'regex.noMatch': { en: 'No matches', 'zh-cn': '无匹配' },
   'regex.invalid': { en: 'Invalid regular expression', 'zh-cn': '正则表达式无效' },
 
+  // —— 密码生成器 ——
+  'tool.password.name': { en: 'Password Generator', 'zh-cn': '密码生成器' },
+  'tool.password.description': {
+    en: 'Generate strong passwords with configurable length and character sets',
+    'zh-cn': '生成强密码，可配置长度与字符集',
+  },
+  'password.length': { en: 'Length', 'zh-cn': '长度' },
+  'password.count': { en: 'Count', 'zh-cn': '数量' },
+  'password.uppercase': { en: 'Uppercase (A-Z)', 'zh-cn': '大写字母 (A-Z)' },
+  'password.lowercase': { en: 'Lowercase (a-z)', 'zh-cn': '小写字母 (a-z)' },
+  'password.digits': { en: 'Digits (0-9)', 'zh-cn': '数字 (0-9)' },
+  'password.symbols': { en: 'Symbols (!@#$...)', 'zh-cn': '特殊符号 (!@#$...)' },
+  'password.excludeSimilar': { en: 'Exclude similar chars (Il1O0)', 'zh-cn': '排除相似字符 (Il1O0)' },
+  'password.generate': { en: 'Generate', 'zh-cn': '生成' },
+  'password.output': { en: 'Passwords', 'zh-cn': '密码列表' },
+  'password.placeholder': { en: 'Generated passwords appear here...', 'zh-cn': '生成的密码显示在此...' },
+  'password.noCharset': { en: 'Select at least one character set', 'zh-cn': '请至少选择一种字符集' },
+  'password.insert': { en: 'Insert Password', 'zh-cn': '插入密码' },
+
+  // —— 进制转换器 ——
+  'tool.numberBase.name': { en: 'Number Base Converter', 'zh-cn': '进制转换' },
+  'tool.numberBase.description': {
+    en: 'Convert between binary, octal, decimal and hexadecimal',
+    'zh-cn': '二进制/八进制/十进制/十六进制互转',
+  },
+  'numberBase.binary': { en: 'Binary (2)', 'zh-cn': '二进制 (2)' },
+  'numberBase.octal': { en: 'Octal (8)', 'zh-cn': '八进制 (8)' },
+  'numberBase.decimal': { en: 'Decimal (10)', 'zh-cn': '十进制 (10)' },
+  'numberBase.hex': { en: 'Hexadecimal (16)', 'zh-cn': '十六进制 (16)' },
+  'numberBase.invalid': { en: 'Invalid number in the selected base', 'zh-cn': '输入数字与所选进制不匹配' },
+
   // —— 编辑器右键命令 ——
   'jsonFormat.error.parse': { en: 'JSON parse failed', 'zh-cn': 'JSON 解析失败' },
   'convert.error.decode': { en: 'Decode failed', 'zh-cn': '解码失败' },

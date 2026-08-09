@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.0.13] - 2026-08-09
+
+### Added
+
+- **密码生成器工具 (Password Generator)**：长度（4-64）与数量（1-100）可调，勾选大小写字母/数字/特殊符号字符集，可排除相似字符（Il1O0），一键批量生成强密码（WebView 内随机生成，无运行时依赖）
+- **进制转换工具 (Number Base Converter)**：二进制/八进制/十进制/十六进制四个输入框，任意一个输入实时更新其他三个，非法输入红色高亮提示
+- **右键菜单补充**：CodeKit 子菜单新增 2 个分类
+  - **Password**：Open Password Generator / Insert Password（光标处或替换选区插入一个 16 位强密码）
+  - **Number Base（多级）**：Open Number Base Converter / 按源进制分组的 12 个转换命令（二进制/八进制/十进制/十六进制下各含"转二进制/转八进制/转十进制/转十六进制"，选中数字原地转换）
+- **密码/进制原地命令** `src/commands/textConvert.ts`：新增 `insertPassword()` / `convertBase()`（通用转换：4 源进制 × 3 目标进制，带 0x/0b/0o 前缀输出）
+- **进制转换 disabled 占位命令**：12 个转换命令均有无选中时显示灰色 `(需选中文字)` 的菜单项
+
 ## [0.0.12] - 2026-08-09
 
 ### Added

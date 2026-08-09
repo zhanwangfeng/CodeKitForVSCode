@@ -232,3 +232,60 @@ export function htmlDecode(editor: vscode.TextEditor): void {
     .replace(/&#(\d+);/g, (_m, code: string) => String.fromCharCode(parseInt(code, 10)));
   editor.edit((b) => b.replace(editor.selection, decoded));
 }
+
+// —— 密码生成 ——
+
+/** 插入一个随机生成的强密码（16 位，含大小写/数字/符号）到光标或替换选中文本 */
+export function insertPassword(editor: vscode.TextEditor): void {
+  const charset =
+    'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%^&*()-_=+[]{};:,.<>?/';
+  let pw = '';
+  for (let i = 0; i < 16; i++) {
+    pw += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  replaceOrInsert(editor, pw);
+}
+
+// —— 进制转换 ——
+
+/** 各进制的校验正则（不含前缀） */
+const BASE_PATTERNS: Record<number, RegExp> = {
+  2: /^[01]+$/,
+  8: /^[0-7]+$/,
+  10: /^[0-9]+$/,
+  16: /^[0-9a-fA-F]+$/,
+};
+
+/** 解析指定进制的数字字符串；空串返回 0，非法返回 null（按 radix 逐位累加，避免 parseInt 处理非法字符） */
+function parseBase(text: string, radix: number): number | null {
+  const s = text.trim();
+  if (s === '') return 0;
+  const re = BASE_PATTERNS[radix];
+  if (!re || !re.test(s)) return null;
+  let value = 0;
+  for (const ch of s) {
+    const d = parseInt(ch, radix);
+    value = value * radix + d;
+  }
+  return value;
+}
+
+/** 十进制 → 指定进制字符串（补 0x/0b/0o 前缀） */
+function formatBase(value: number, radix: number): string {
+  if (radix === 16) return '0x' + value.toString(16).toUpperCase();
+  if (radix === 8) return '0o' + value.toString(8);
+  if (radix === 2) return '0b' + value.toString(2);
+  return value.toString(10);
+}
+
+/** 将选中文本从 fromRadix 进制原地转换为 toRadix 进制；失败弹错误提示 */
+export function convertBase(editor: vscode.TextEditor, fromRadix: number, toRadix: number): void {
+  const text = editor.document.getText(editor.selection);
+  if (!text) return;
+  const value = parseBase(text, fromRadix);
+  if (value === null) {
+    vscode.window.showErrorMessage(t('convert.error.decode'));
+    return;
+  }
+  editor.edit((b) => b.replace(editor.selection, formatBase(value, toRadix)));
+}

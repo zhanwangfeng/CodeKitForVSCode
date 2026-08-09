@@ -302,6 +302,126 @@
         "command": "codeKit.sqlFormatDisabled",
         "title": "Format SQL (需选中文字)",
         "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.openPassword",
+        "title": "Open Password Generator"
+      },
+      {
+        "command": "codeKit.insertPassword",
+        "title": "Insert Password"
+      },
+      {
+        "command": "codeKit.openNumberBase",
+        "title": "Open Number Base Converter"
+      },
+      {
+        "command": "codeKit.numberBaseBinToOct",
+        "title": "Convert to Octal"
+      },
+      {
+        "command": "codeKit.numberBaseBinToDec",
+        "title": "Convert to Decimal"
+      },
+      {
+        "command": "codeKit.numberBaseBinToHex",
+        "title": "Convert to Hexadecimal"
+      },
+      {
+        "command": "codeKit.numberBaseOctToBin",
+        "title": "Convert to Binary"
+      },
+      {
+        "command": "codeKit.numberBaseOctToDec",
+        "title": "Convert to Decimal"
+      },
+      {
+        "command": "codeKit.numberBaseOctToHex",
+        "title": "Convert to Hexadecimal"
+      },
+      {
+        "command": "codeKit.numberBaseDecToBin",
+        "title": "Convert to Binary"
+      },
+      {
+        "command": "codeKit.numberBaseDecToOct",
+        "title": "Convert to Octal"
+      },
+      {
+        "command": "codeKit.numberBaseDecToHex",
+        "title": "Convert to Hexadecimal"
+      },
+      {
+        "command": "codeKit.numberBaseHexToBin",
+        "title": "Convert to Binary"
+      },
+      {
+        "command": "codeKit.numberBaseHexToOct",
+        "title": "Convert to Octal"
+      },
+      {
+        "command": "codeKit.numberBaseHexToDec",
+        "title": "Convert to Decimal"
+      },
+      {
+        "command": "codeKit.numberBaseBinToOctDisabled",
+        "title": "Convert to Octal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseBinToDecDisabled",
+        "title": "Convert to Decimal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseBinToHexDisabled",
+        "title": "Convert to Hexadecimal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseOctToBinDisabled",
+        "title": "Convert to Binary (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseOctToDecDisabled",
+        "title": "Convert to Decimal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseOctToHexDisabled",
+        "title": "Convert to Hexadecimal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseDecToBinDisabled",
+        "title": "Convert to Binary (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseDecToOctDisabled",
+        "title": "Convert to Octal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseDecToHexDisabled",
+        "title": "Convert to Hexadecimal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseHexToBinDisabled",
+        "title": "Convert to Binary (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseHexToOctDisabled",
+        "title": "Convert to Octal (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.numberBaseHexToDecDisabled",
+        "title": "Convert to Decimal (需选中文字)",
+        "enablement": "editorHasSelection"
       }
     ],
     "submenus": [
@@ -368,6 +488,30 @@
       {
         "id": "codeKit.sql",
         "label": "SQL Formatter"
+      },
+      {
+        "id": "codeKit.password",
+        "label": "Password"
+      },
+      {
+        "id": "codeKit.numberBase",
+        "label": "Number Base"
+      },
+      {
+        "id": "codeKit.numberBaseBin",
+        "label": "Binary"
+      },
+      {
+        "id": "codeKit.numberBaseOct",
+        "label": "Octal"
+      },
+      {
+        "id": "codeKit.numberBaseDec",
+        "label": "Decimal"
+      },
+      {
+        "id": "codeKit.numberBaseHex",
+        "label": "Hexadecimal"
       }
     ],
     "menus": {
@@ -389,7 +533,19 @@
         { "command": "codeKit.shaHashDisabled", "when": "false" },
         { "command": "codeKit.htmlEncodeDisabled", "when": "false" },
         { "command": "codeKit.htmlDecodeDisabled", "when": "false" },
-        { "command": "codeKit.sqlFormatDisabled", "when": "false" }
+        { "command": "codeKit.sqlFormatDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseBinToOctDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseBinToDecDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseBinToHexDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseOctToBinDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseOctToDecDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseOctToHexDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseDecToBinDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseDecToOctDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseDecToHexDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseHexToBinDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseHexToOctDisabled", "when": "false" },
+        { "command": "codeKit.numberBaseHexToDecDisabled", "when": "false" }
       ],
       "view/title": [
         {
@@ -477,6 +633,14 @@
         {
           "submenu": "codeKit.sql",
           "group": "codeKit@15"
+        },
+        {
+          "submenu": "codeKit.password",
+          "group": "codeKit@16"
+        },
+        {
+          "submenu": "codeKit.numberBase",
+          "group": "codeKit@17"
         }
       ],
       "codeKit.json": [
@@ -755,6 +919,166 @@
           "command": "codeKit.sqlFormatDisabled",
           "when": "!editorHasSelection",
           "group": "codeKit@2"
+        }
+      ],
+      "codeKit.password": [
+        {
+          "command": "codeKit.openPassword",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.insertPassword",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.numberBase": [
+        {
+          "command": "codeKit.openNumberBase",
+          "group": "codeKit@1"
+        },
+        {
+          "submenu": "codeKit.numberBaseBin",
+          "group": "codeKit@2"
+        },
+        {
+          "submenu": "codeKit.numberBaseOct",
+          "group": "codeKit@3"
+        },
+        {
+          "submenu": "codeKit.numberBaseDec",
+          "group": "codeKit@4"
+        },
+        {
+          "submenu": "codeKit.numberBaseHex",
+          "group": "codeKit@5"
+        }
+      ],
+      "codeKit.numberBaseBin": [
+        {
+          "command": "codeKit.numberBaseBinToOct",
+          "when": "editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseBinToOctDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseBinToDec",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseBinToDecDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseBinToHex",
+          "when": "editorHasSelection",
+          "group": "codeKit@3"
+        },
+        {
+          "command": "codeKit.numberBaseBinToHexDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@3"
+        }
+      ],
+      "codeKit.numberBaseOct": [
+        {
+          "command": "codeKit.numberBaseOctToBin",
+          "when": "editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseOctToBinDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseOctToDec",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseOctToDecDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseOctToHex",
+          "when": "editorHasSelection",
+          "group": "codeKit@3"
+        },
+        {
+          "command": "codeKit.numberBaseOctToHexDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@3"
+        }
+      ],
+      "codeKit.numberBaseDec": [
+        {
+          "command": "codeKit.numberBaseDecToBin",
+          "when": "editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseDecToBinDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseDecToOct",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseDecToOctDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseDecToHex",
+          "when": "editorHasSelection",
+          "group": "codeKit@3"
+        },
+        {
+          "command": "codeKit.numberBaseDecToHexDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@3"
+        }
+      ],
+      "codeKit.numberBaseHex": [
+        {
+          "command": "codeKit.numberBaseHexToBin",
+          "when": "editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseHexToBinDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.numberBaseHexToOct",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseHexToOctDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.numberBaseHexToDec",
+          "when": "editorHasSelection",
+          "group": "codeKit@3"
+        },
+        {
+          "command": "codeKit.numberBaseHexToDecDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@3"
         }
       ]
     }

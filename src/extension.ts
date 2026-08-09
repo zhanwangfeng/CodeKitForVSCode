@@ -11,6 +11,8 @@ import {
   htmlDecode,
   htmlEncode,
   insertCurrentTime,
+  convertBase,
+  insertPassword,
   insertUuid,
   md5Hash,
   sha256Hash,
@@ -31,6 +33,8 @@ import { htmlEntityTool } from './tools/converters/htmlEntity';
 import { jsonParserTool } from './tools/jsonParser';
 import { jwtTool } from './tools/converters/jwt';
 import { md5Tool } from './tools/converters/md5';
+import { numberBaseTool } from './tools/converters/numberBase';
+import { passwordTool } from './tools/converters/password';
 import { regexTool } from './tools/converters/regex';
 import { shaTool } from './tools/converters/sha';
 import { sqlTool } from './tools/converters/sql';
@@ -349,6 +353,47 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
   );
 
+  // —— 编辑器右键：密码生成 ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openPassword', () =>
+      openToolWithSelection(passwordTool, context),
+    ),
+    vscode.commands.registerCommand('codeKit.insertPassword', () => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor) insertPassword(editor);
+    }),
+  );
+
+  // —— 编辑器右键：进制转换（12 个转换命令：4 源进制 × 3 目标进制）——
+  // 源进制命令，按来源绑定选区内容解析；转换函数 convertBase(editor, fromRadix, toRadix)
+  const baseConversions: { from: number; to: number; cmd: string }[] = [
+    { from: 2, to: 8, cmd: 'codeKit.numberBaseBinToOct' },
+    { from: 2, to: 10, cmd: 'codeKit.numberBaseBinToDec' },
+    { from: 2, to: 16, cmd: 'codeKit.numberBaseBinToHex' },
+    { from: 8, to: 2, cmd: 'codeKit.numberBaseOctToBin' },
+    { from: 8, to: 10, cmd: 'codeKit.numberBaseOctToDec' },
+    { from: 8, to: 16, cmd: 'codeKit.numberBaseOctToHex' },
+    { from: 10, to: 2, cmd: 'codeKit.numberBaseDecToBin' },
+    { from: 10, to: 8, cmd: 'codeKit.numberBaseDecToOct' },
+    { from: 10, to: 16, cmd: 'codeKit.numberBaseDecToHex' },
+    { from: 16, to: 2, cmd: 'codeKit.numberBaseHexToBin' },
+    { from: 16, to: 8, cmd: 'codeKit.numberBaseHexToOct' },
+    { from: 16, to: 10, cmd: 'codeKit.numberBaseHexToDec' },
+  ];
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openNumberBase', () =>
+      openToolWithSelection(numberBaseTool, context),
+    ),
+  );
+  for (const c of baseConversions) {
+    context.subscriptions.push(
+      vscode.commands.registerCommand(c.cmd, () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) convertBase(editor, c.from, c.to);
+      }),
+    );
+  }
+
   // 语言切换时更新所有已打开面板的标签标题，并通过 onLocaleChange 通知 WebView 原地更新全部文案
   context.subscriptions.push(
     vscode.commands.registerCommand('codeKit.updatePanelTitles', () => {
@@ -379,6 +424,14 @@ export function activate(context: vscode.ExtensionContext): void {
     'codeKit.shaHashDisabled',
     'codeKit.htmlEncodeDisabled', 'codeKit.htmlDecodeDisabled',
     'codeKit.sqlFormatDisabled',
+    'codeKit.numberBaseBinToOctDisabled', 'codeKit.numberBaseBinToDecDisabled',
+    'codeKit.numberBaseBinToHexDisabled',
+    'codeKit.numberBaseOctToBinDisabled', 'codeKit.numberBaseOctToDecDisabled',
+    'codeKit.numberBaseOctToHexDisabled',
+    'codeKit.numberBaseDecToBinDisabled', 'codeKit.numberBaseDecToOctDisabled',
+    'codeKit.numberBaseDecToHexDisabled',
+    'codeKit.numberBaseHexToBinDisabled', 'codeKit.numberBaseHexToOctDisabled',
+    'codeKit.numberBaseHexToDecDisabled',
   ];
   for (const cmd of disabledCommands) {
     context.subscriptions.push(vscode.commands.registerCommand(cmd, () => {}));

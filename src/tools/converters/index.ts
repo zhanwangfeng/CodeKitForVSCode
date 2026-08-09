@@ -4,6 +4,8 @@ import { colorTool } from './color';
 import { htmlEntityTool } from './htmlEntity';
 import { jwtTool } from './jwt';
 import { md5Tool } from './md5';
+import { numberBaseTool } from './numberBase';
+import { passwordTool } from './password';
 import { regexTool } from './regex';
 import { shaTool } from './sha';
 import { sqlTool } from './sql';
@@ -31,4 +33,6 @@ export const converterTools: readonly Tool[] = [
   htmlEntityTool,
   textCounterTool,
   sqlTool,
+  passwordTool,
+  numberBaseTool,
 ];
