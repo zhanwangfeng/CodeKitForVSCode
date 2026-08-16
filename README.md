@@ -2,6 +2,8 @@
 
 [![VS Marketplace](https://vsmarketplacebadges.dev/version-short/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
 [![Installs](https://vsmarketplacebadges.dev/installs/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
+[![Downloads](https://vsmarketplacebadges.dev/downloads/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
+[![Rates](https://vsmarketplacebadges.dev/rating-star/zhanwangfeng.code-kit-for-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=zhanwangfeng.code-kit-for-vscode)
 
 **English** | [中文](README.zh-CN.md)
 
