@@ -3,6 +3,7 @@ import { base64Tool } from './base64';
 import { colorTool } from './color';
 import { htmlEntityTool } from './htmlEntity';
 import { jwtTool } from './jwt';
+import { letterCaseTool } from './letterCase';
 import { md5Tool } from './md5';
 import { numberBaseTool } from './numberBase';
 import { passwordTool } from './password';
@@ -26,6 +27,7 @@ export const converterTools: readonly Tool[] = [
   md5Tool,
   urlEncodeTool,
   varNameTool,
+  letterCaseTool,
   shaTool,
   jwtTool,
   colorTool,

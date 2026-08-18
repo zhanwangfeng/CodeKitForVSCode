@@ -2,10 +2,10 @@
   "name": "code-kit-for-vscode",
   "displayName": "CodeKit",
   "description": "A toolkit of handy tools inside VS Code.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "publisher": "zhanwangfeng",
   "license": "MIT",
-  "icon": "icons/icon-128.png",
+  "icon": "resources/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/zhanwangfeng/CodeKitForVSCode.git"
@@ -36,7 +36,7 @@
         {
           "id": "codeKit",
           "title": "CodeKit",
-          "icon": "resources/icon.svg"
+          "icon": "resources/icon.png"
         }
       ]
     },
@@ -237,6 +237,28 @@
       {
         "command": "codeKit.varNameConstantDisabled",
         "title": "CONSTANT_CASE (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.openLetterCase",
+        "title": "Open Letter Case"
+      },
+      {
+        "command": "codeKit.toUpperCase",
+        "title": "UPPERCASE"
+      },
+      {
+        "command": "codeKit.toLowerCase",
+        "title": "lowercase"
+      },
+      {
+        "command": "codeKit.toUpperCaseDisabled",
+        "title": "UPPERCASE (需选中文字)",
+        "enablement": "editorHasSelection"
+      },
+      {
+        "command": "codeKit.toLowerCaseDisabled",
+        "title": "lowercase (需选中文字)",
         "enablement": "editorHasSelection"
       },
       {
@@ -462,6 +484,10 @@
         "label": "Variable Name"
       },
       {
+        "id": "codeKit.letterCase",
+        "label": "Letter Case"
+      },
+      {
         "id": "codeKit.sha",
         "label": "SHA"
       },
@@ -530,6 +556,8 @@
         { "command": "codeKit.varNameKebabDisabled", "when": "false" },
         { "command": "codeKit.varNamePascalDisabled", "when": "false" },
         { "command": "codeKit.varNameConstantDisabled", "when": "false" },
+        { "command": "codeKit.toUpperCaseDisabled", "when": "false" },
+        { "command": "codeKit.toLowerCaseDisabled", "when": "false" },
         { "command": "codeKit.shaHashDisabled", "when": "false" },
         { "command": "codeKit.htmlEncodeDisabled", "when": "false" },
         { "command": "codeKit.htmlDecodeDisabled", "when": "false" },
@@ -607,40 +635,44 @@
           "group": "codeKit@8"
         },
         {
-          "submenu": "codeKit.sha",
+          "submenu": "codeKit.letterCase",
           "group": "codeKit@9"
         },
         {
-          "submenu": "codeKit.jwt",
+          "submenu": "codeKit.sha",
           "group": "codeKit@10"
         },
         {
-          "submenu": "codeKit.color",
+          "submenu": "codeKit.jwt",
           "group": "codeKit@11"
         },
         {
-          "submenu": "codeKit.regex",
+          "submenu": "codeKit.color",
           "group": "codeKit@12"
         },
         {
-          "submenu": "codeKit.htmlEntity",
+          "submenu": "codeKit.regex",
           "group": "codeKit@13"
         },
         {
-          "submenu": "codeKit.textCounter",
+          "submenu": "codeKit.htmlEntity",
           "group": "codeKit@14"
         },
         {
-          "submenu": "codeKit.sql",
+          "submenu": "codeKit.textCounter",
           "group": "codeKit@15"
         },
         {
-          "submenu": "codeKit.password",
+          "submenu": "codeKit.sql",
           "group": "codeKit@16"
         },
         {
-          "submenu": "codeKit.numberBase",
+          "submenu": "codeKit.password",
           "group": "codeKit@17"
+        },
+        {
+          "submenu": "codeKit.numberBase",
+          "group": "codeKit@18"
         }
       ],
       "codeKit.json": [
@@ -835,6 +867,32 @@
         },
         {
           "command": "codeKit.varNameConstantDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        }
+      ],
+      "codeKit.letterCase": [
+        {
+          "command": "codeKit.openLetterCase",
+          "group": "codeKit@1"
+        },
+        {
+          "command": "codeKit.toUpperCase",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.toUpperCaseDisabled",
+          "when": "!editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.toLowerCase",
+          "when": "editorHasSelection",
+          "group": "codeKit@2"
+        },
+        {
+          "command": "codeKit.toLowerCaseDisabled",
           "when": "!editorHasSelection",
           "group": "codeKit@2"
         }

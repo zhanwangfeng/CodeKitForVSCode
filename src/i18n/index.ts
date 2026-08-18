@@ -228,6 +228,16 @@ const messages: Record<string, Record<Locale, string>> = {
   'sql.keywordLower': { en: 'lower', 'zh-cn': '小写' },
   'sql.indent': { en: 'Indent', 'zh-cn': '缩进' },
 
+  // —— 字母大小写转换 ——
+  'tool.letterCase.name': { en: 'Letter Case', 'zh-cn': '字母大小写转换' },
+  'tool.letterCase.description': {
+    en: 'Convert text to UPPERCASE or lowercase',
+    'zh-cn': '将文本整体转换为大写或小写',
+  },
+  'letterCase.placeholder': { en: 'Enter text to convert...', 'zh-cn': '输入要转换的文本...' },
+  'letterCase.upper': { en: 'UPPERCASE', 'zh-cn': '全大写' },
+  'letterCase.lower': { en: 'lowercase', 'zh-cn': '全小写' },
+
   // —— 变量名转换 ——
   'tool.varName.name': { en: 'Variable Name', 'zh-cn': '变量名转换' },
   'tool.varName.description': {

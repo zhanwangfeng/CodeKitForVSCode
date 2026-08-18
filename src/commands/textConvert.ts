@@ -117,6 +117,20 @@ export function insertUuid(editor: vscode.TextEditor): void {
   replaceOrInsert(editor, uuid);
 }
 
+// —— 字母大小写转换 ——
+
+export function toUpperCase(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection);
+  if (!text) return;
+  editor.edit((b) => b.replace(editor.selection, text.toUpperCase()));
+}
+
+export function toLowerCase(editor: vscode.TextEditor): void {
+  const text = editor.document.getText(editor.selection);
+  if (!text) return;
+  editor.edit((b) => b.replace(editor.selection, text.toLowerCase()));
+}
+
 // —— 变量名转换 ——
 
 /** 按非字母数字字符分词，各词转小写 */

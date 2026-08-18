@@ -16,6 +16,8 @@ import {
   insertUuid,
   md5Hash,
   sha256Hash,
+  toLowerCase,
+  toUpperCase,
   sqlFormat,
   toCamelCase,
   toConstantCase,
@@ -32,6 +34,7 @@ import { colorTool } from './tools/converters/color';
 import { htmlEntityTool } from './tools/converters/htmlEntity';
 import { jsonParserTool } from './tools/jsonParser';
 import { jwtTool } from './tools/converters/jwt';
+import { letterCaseTool } from './tools/converters/letterCase';
 import { md5Tool } from './tools/converters/md5';
 import { numberBaseTool } from './tools/converters/numberBase';
 import { passwordTool } from './tools/converters/password';
@@ -288,6 +291,21 @@ export function activate(context: vscode.ExtensionContext): void {
     }),
   );
 
+  // —— 编辑器右键：字母大小写转换 ——
+  context.subscriptions.push(
+    vscode.commands.registerCommand('codeKit.openLetterCase', () =>
+      openToolWithSelection(letterCaseTool, context),
+    ),
+    vscode.commands.registerCommand('codeKit.toUpperCase', () => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor) toUpperCase(editor);
+    }),
+    vscode.commands.registerCommand('codeKit.toLowerCase', () => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor) toLowerCase(editor);
+    }),
+  );
+
   // —— 编辑器右键：SHA ——
   context.subscriptions.push(
     vscode.commands.registerCommand('codeKit.openSha', () =>
@@ -421,6 +439,7 @@ export function activate(context: vscode.ExtensionContext): void {
     'codeKit.varNameCamelDisabled', 'codeKit.varNameSnakeDisabled',
     'codeKit.varNameKebabDisabled', 'codeKit.varNamePascalDisabled',
     'codeKit.varNameConstantDisabled',
+    'codeKit.toUpperCaseDisabled', 'codeKit.toLowerCaseDisabled',
     'codeKit.shaHashDisabled',
     'codeKit.htmlEncodeDisabled', 'codeKit.htmlDecodeDisabled',
     'codeKit.sqlFormatDisabled',
